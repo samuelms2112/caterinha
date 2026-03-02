@@ -4,14 +4,19 @@ const path = require('path');
 const multer = require('multer');
 const { lerFaculdades, salvarFaculdades, lerAlunos, salvarAlunos, lerAdmin } = require('../helpers/db');
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, path.join(__dirname, '../public/uploads/logos')),
-  filename: (req, file, cb) => {
-    const ext = path.extname(file.originalname);
-    cb(null, Date.now() + ext);
+const uploadFoto = multer({
+  storage: multer.diskStorage({
+    destination: (req, file, cb) => cb(null, path.join(__dirname, '../public/uploads')),
+    filename: (req, file, cb) => {
+      const ext = path.extname(file.originalname);
+      cb(null, 'foto_' + Date.now() + ext);
+    }
+  }),
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) cb(null, true);
+    else cb(new Error('Apenas imagens são permitidas'));
   }
 });
-const upload = multer({ storage });
 
 function adminAutenticado(req, res, next) {
   if (!req.session.admin) return res.redirect('/admin/login');
@@ -84,7 +89,7 @@ router.get('/alunos/novo', adminAutenticado, (req, res) => {
   });
 });
 
-router.post('/alunos/novo', adminAutenticado, async (req, res) => {
+router.post('/alunos/novo', adminAutenticado, uploadFoto.single('foto'), async (req, res) => {
   const alunos = await lerAlunos();
   const { matricula, nome, curso, periodo, validade, rg, cpf, unidade, faculdadeId, senha, modelo } = req.body;
   if (alunos.find(a => a.matricula === matricula)) {
@@ -97,7 +102,8 @@ router.post('/alunos/novo', adminAutenticado, async (req, res) => {
       erro: 'Matrícula já cadastrada.'
     });
   }
-  alunos.push({ matricula, nome, curso, periodo, validade, rg, cpf, unidade, faculdadeId, foto: 'default.png', senha, modelo: modelo || '1' });
+  const foto = req.file ? req.file.filename : 'default.png';
+  alunos.push({ matricula, nome, curso, periodo, validade, rg, cpf, unidade, faculdadeId, foto, senha, modelo: modelo || '1' });
   salvarAlunos(alunos);
   res.redirect('/admin/alunos');
 });
@@ -116,12 +122,13 @@ router.get('/alunos/:matricula/editar', adminAutenticado, async (req, res) => {
   });
 });
 
-router.post('/alunos/:matricula/editar', adminAutenticado, async (req, res) => {
+router.post('/alunos/:matricula/editar', adminAutenticado, uploadFoto.single('foto'), async (req, res) => {
   const alunos = await lerAlunos();
   const idx = alunos.findIndex(a => a.matricula === req.params.matricula);
   if (idx === -1) return res.redirect('/admin/alunos');
   const { nome, curso, periodo, validade, rg, cpf, unidade, faculdadeId, senha, modelo } = req.body;
-  alunos[idx] = { ...alunos[idx], nome, curso, periodo, validade, rg, cpf, unidade, faculdadeId, senha, modelo };
+  const foto = req.file ? req.file.filename : alunos[idx].foto;
+  alunos[idx] = { ...alunos[idx], nome, curso, periodo, validade, rg, cpf, unidade, faculdadeId, senha, modelo, foto };
   salvarAlunos(alunos);
   res.redirect('/admin/alunos');
 });
@@ -153,7 +160,7 @@ router.get('/faculdades/nova', adminAutenticado, (req, res) => {
   });
 });
 
-router.post('/faculdades/nova', adminAutenticado, upload.single('logo'), (req, res) => {
+router.post('/faculdades/nova', adminAutenticado, (req, res) => {
   const faculdades = lerFaculdades();
   const { id, nome, sigla, cnpj, endereco, cidade, telefone, site, corPrimaria, corSecundaria, modeloPadrao } = req.body;
   if (faculdades.find(f => f.id === id)) {
@@ -164,8 +171,7 @@ router.post('/faculdades/nova', adminAutenticado, upload.single('logo'), (req, r
       erro: 'ID já cadastrado.'
     });
   }
-  const logo = req.file ? req.file.filename : '';
-  faculdades.push({ id, nome, sigla, cnpj, endereco, cidade, telefone, site, corPrimaria, corSecundaria, modeloPadrao: parseInt(modeloPadrao) || 1, logo });
+  faculdades.push({ id, nome, sigla, cnpj, endereco, cidade, telefone, site, corPrimaria, corSecundaria, modeloPadrao: parseInt(modeloPadrao) || 1 });
   salvarFaculdades(faculdades);
   res.redirect('/admin/faculdades');
 });
@@ -182,13 +188,12 @@ router.get('/faculdades/:id/editar', adminAutenticado, (req, res) => {
   });
 });
 
-router.post('/faculdades/:id/editar', adminAutenticado, upload.single('logo'), (req, res) => {
+router.post('/faculdades/:id/editar', adminAutenticado, (req, res) => {
   const faculdades = lerFaculdades();
   const idx = faculdades.findIndex(f => f.id === req.params.id);
   if (idx === -1) return res.redirect('/admin/faculdades');
   const { nome, sigla, cnpj, endereco, cidade, telefone, site, corPrimaria, corSecundaria, modeloPadrao } = req.body;
-  const logo = req.file ? req.file.filename : faculdades[idx].logo;
-  faculdades[idx] = { ...faculdades[idx], nome, sigla, cnpj, endereco, cidade, telefone, site, corPrimaria, corSecundaria, modeloPadrao: parseInt(modeloPadrao) || 1, logo };
+  faculdades[idx] = { ...faculdades[idx], nome, sigla, cnpj, endereco, cidade, telefone, site, corPrimaria, corSecundaria, modeloPadrao: parseInt(modeloPadrao) || 1 };
   salvarFaculdades(faculdades);
   res.redirect('/admin/faculdades');
 });
