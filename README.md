@@ -76,3 +76,4 @@ Coloque as fotos em `public/uploads/` e atualize o campo `foto` no CSV.
 | `GET /carterinha/pdf` | Baixar PDF |
 | `GET /validar/:token` | Validar carteirinha (pública) |
 | `GET /logout` | Sair |
+# caterinha
