@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Portal do Aluno</title>
+  <link rel="stylesheet" href="/css/portal.css">
+</head>
+<body class="portal-login-bg">
+
+  <div class="portal-login-wrap">
+
+    <div class="portal-login-logo">
+      <div class="portal-login-logo-text">PORTAL</div>
+      <div class="portal-login-logo-sub">DO ALUNO</div>
+    </div>
+
+    <% if (erro) { %>
+      <div class="portal-login-error">&#9888; <%= erro %></div>
+    <% } %>
+
+    <form method="POST" action="/login" class="portal-login-form">
+      <input
+        type="text"
+        name="matricula"
+        placeholder="Matrícula / RA"
+        required
+        autofocus
+        autocomplete="username"
+      >
+      <input
+        type="password"
+        name="senha"
+        placeholder="Digite sua senha"
+        required
+        autocomplete="current-password"
+      >
+      <button type="submit" class="btn-entrar">ENTRAR</button>
+      <div class="login-secondary-btns">
+        <button type="button" class="btn-secondary-login"
+                onclick="alert('Entre em contato com a secretaria para redefinir sua senha.')">
+          NOVA SENHA
+        </button>
+        <button type="button" class="btn-secondary-login"
+                onclick="alert('Política de privacidade: seus dados são protegidos conforme a LGPD.')">
+          PRIVACIDADE
+        </button>
+      </div>
+    </form>
+
+    <p class="portal-login-version">Sistema Carterinha — Versão 2.0</p>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title><%= pageTitle %> — Portal do Aluno</title>
+  <link rel="stylesheet" href="/css/portal.css">
+</head>
+<body>
+<div class="portal-app">
+
+  <!-- Drawer overlay -->
+  <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+
+  <!-- Sidebar drawer -->
+  <nav class="portal-drawer" id="drawer">
+    <div class="drawer-profile">
+      <% if (aluno.foto && aluno.foto !== 'default.png') { %>
+        <img src="/uploads/<%= aluno.foto %>" class="drawer-photo" alt="Foto">
+      <% } else { %>
+        <div class="drawer-photo-placeholder"><%= aluno.nome ? aluno.nome.charAt(0).toUpperCase() : '?' %></div>
+      <% } %>
+      <p class="drawer-name"><%= aluno.nome.toUpperCase() %></p>
+    </div>
+    <div class="drawer-nav">
+      <a href="/portal"            class="drawer-link"><span>&#127968;</span> INÍCIO</a>
+      <a href="/portal/foto"        class="drawer-link"><span>&#128247;</span> FOTO</a>
+      <a href="/portal/mensagens"   class="drawer-link"><span>&#9993;</span> MENSAGENS</a>
+      <a href="/portal/declaracoes" class="drawer-link"><span>&#128196;</span> DECLARAÇÕES</a>
+      <a href="/portal/faltas"      class="drawer-link"><span>&#128197;</span> AULAS E FALTAS</a>
+      <a href="/portal/horarios"    class="drawer-link"><span>&#128345;</span> HORÁRIO DAS AULAS</a>
+      <a href="/portal/boletim"     class="drawer-link"><span>&#128202;</span> BOLETIM</a>
+      <a href="/portal/codigo"      class="drawer-link"><span>&#128273;</span> CÓDIGO DE ENTRADA</a>
+      <a href="/portal/identidade"  class="drawer-link"><span>&#128196;</span> IDENTIDADE ESTUDANTIL</a>
+      <a href="/logout"             class="drawer-link drawer-link--sair"><span>&#128073;</span> SAIR</a>
+    </div>
+  </nav>
+
+  <!-- Header bar -->
+  <header class="portal-header">
+    <button class="hamburger" onclick="openDrawer()" aria-label="Menu">&#9776;</button>
+    <span class="portal-header-title"><%= pageTitle %></span>
+    <% if (typeof showBack !== 'undefined' && showBack) { %>
+      <a href="/portal" class="header-back">&#8592;</a>
+    <% } else { %>
+      <span style="width:36px"></span>
+    <% } %>
+  </header>
+
+  <!-- Content -->
+  <main class="portal-content">

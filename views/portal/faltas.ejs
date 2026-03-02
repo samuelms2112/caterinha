@@ -1,0 +1,25 @@
+<%- include('_header', { pageTitle: 'Aulas e Faltas', aluno: aluno, showBack: true }) %>
+
+<div class="portal-card portal-card--data" style="margin-bottom:12px">
+  <p><strong>Aluno:</strong> <%= aluno.nome %></p>
+  <p><strong>Matrícula:</strong> <%= aluno.matricula %></p>
+  <p><strong>Curso:</strong> <%= aluno.curso %></p>
+</div>
+
+<div class="portal-section-title">FREQUÊNCIA POR DISCIPLINA</div>
+
+<% content.boletim.forEach(d => { %>
+  <div class="portal-card portal-card--data" style="margin-bottom:8px">
+    <p style="font-weight:600;margin-bottom:6px"><%= d.nome %></p>
+    <div style="display:flex;gap:16px;font-size:13px">
+      <span>Aulas: <strong><%= d.totalAulas %></strong></span>
+      <span>Faltas: <strong style="color:<%= d.faltas > 8 ? '#c0392b' : '#333' %>"><%= d.faltas %></strong></span>
+      <span>Freq.: <strong style="color:<%= d.freq < 75 ? '#c0392b' : '#27ae60' %>"><%= d.freq %>%</strong></span>
+    </div>
+    <div class="freq-bar">
+      <div class="freq-fill" style="width:<%= d.freq %>%;background:<%= d.freq < 75 ? '#c0392b' : '#27ae60' %>"></div>
+    </div>
+  </div>
+<% }) %>
+
+<%- include('_footer') %>

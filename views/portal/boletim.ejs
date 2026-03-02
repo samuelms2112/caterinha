@@ -1,0 +1,35 @@
+<%- include('_header', { pageTitle: 'Boletim', aluno: aluno, showBack: true }) %>
+
+<div class="portal-card portal-card--data" style="margin-bottom:12px">
+  <p><strong>Aluno:</strong> <%= aluno.nome %></p>
+  <p><strong>Curso:</strong> <%= aluno.curso %> &nbsp;|&nbsp; <strong>Período:</strong> <%= aluno.periodo %></p>
+</div>
+
+<div class="portal-section-title">NOTAS POR DISCIPLINA</div>
+
+<div class="boletim-table-wrap">
+  <table class="boletim-table">
+    <thead>
+      <tr>
+        <th>Disciplina</th>
+        <th>N1</th>
+        <th>N2</th>
+        <th>Média</th>
+        <th>Sit.</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% content.boletim.forEach(d => { %>
+        <tr>
+          <td><%= d.nome %></td>
+          <td><%= d.n1.toFixed(1) %></td>
+          <td><%= d.n2.toFixed(1) %></td>
+          <td class="<%= d.media >= 6 ? 'nota-ok' : 'nota-rep' %>"><strong><%= d.media.toFixed(1) %></strong></td>
+          <td class="<%= d.media >= 6 ? 'nota-ok' : 'nota-rep' %>"><%= d.media >= 6 ? 'APR' : 'REP' %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+<%- include('_footer') %>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — <%= title %></title>
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <div class="admin-wrapper">
+
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <span class="sidebar-logo">🎓</span>
+        <span>Painel Admin</span>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="/admin" class="sidebar-link <%= view === 'dashboard' ? 'active' : '' %>">
+          <span class="nav-icon">&#9783;</span> Dashboard
+        </a>
+        <a href="/admin/alunos" class="sidebar-link <%= (view === 'alunos-lista' || view === 'alunos-form') ? 'active' : '' %>">
+          <span class="nav-icon">&#9786;</span> Alunos
+        </a>
+        <a href="/admin/faculdades" class="sidebar-link <%= (view === 'faculdades-lista' || view === 'faculdades-form') ? 'active' : '' %>">
+          <span class="nav-icon">&#127963;</span> Faculdades
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <span class="sidebar-user">&#128100; <%= admin.usuario %></span>
+        <a href="/admin/logout" class="btn-logout">Sair</a>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="main-header">
+        <h1 class="main-title"><%= title %></h1>
+      </header>
+      <div class="main-body">
+        <%- include(view) %>
+      </div>
+    </main>
+
+  </div>
+</body>
+</html>

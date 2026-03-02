@@ -1,0 +1,9 @@
+node_modules/
+public/uploads/logos/*
+public/uploads/*.png
+public/uploads/*.jpg
+public/uploads/*.jpeg
+public/uploads/*.webp
+!public/uploads/default.svg
+*.log
+.env

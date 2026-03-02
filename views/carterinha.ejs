@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carterinha — <%= aluno.nome %></title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="carterinha-page">
+
+  <header class="topbar">
+    <span class="topbar-logo">🎓 Carterinha Estudantil</span>
+    <div class="topbar-actions">
+      <span class="topbar-user">Olá, <%= aluno.nome.split(' ')[0] %>!</span>
+      <a href="/logout" class="btn-sair">Sair</a>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <h2 class="page-title">Sua Carteirinha</h2>
+
+
+    <!-- ══════════════════════════════════════
+         CARTEIRINHA — layout inspirado no modelo
+         ══════════════════════════════════════ -->
+    <div class="card-wrap">
+      <div class="student-card">
+
+        <!-- ÁREA BRANCA (esquerda) -->
+        <div class="card-white">
+
+          <!-- Parte superior: foto + dados -->
+          <div class="card-top">
+            <div class="card-foto">
+              <% if (aluno.foto && aluno.foto !== 'default.png') { %>
+                <img src="/uploads/<%= aluno.foto %>" alt="Foto">
+              <% } else { %>
+                <div class="foto-ph">👤</div>
+              <% } %>
+            </div>
+
+            <div class="card-info">
+              <p class="card-unidade"><%= aluno.unidade ? aluno.unidade.toUpperCase() : faculdade.cidade.toUpperCase() %></p>
+
+              <div class="campo">
+                <span class="campo-label">CÓDIGO</span>
+                <span class="campo-valor"><%= aluno.matricula %></span>
+              </div>
+              <div class="campo">
+                <span class="campo-label">IDENTIDADE</span>
+                <span class="campo-valor"><%= aluno.rg || '—' %></span>
+              </div>
+              <div class="campo">
+                <span class="campo-label">VALIDADE</span>
+                <span class="campo-valor"><%= aluno.validade %></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Parte inferior: nome + curso -->
+          <div class="card-bottom">
+            <p class="card-nome"><%= aluno.nome.toUpperCase() %></p>
+            <p class="card-curso"><%= aluno.curso.toUpperCase() %></p>
+          </div>
+
+        </div>
+
+        <!-- SIDEBAR AZUL (direita) -->
+        <div class="card-sidebar">
+          <div class="sidebar-logo">
+            <span class="logo-sigla"><%= faculdade.sigla %></span>
+            <span class="logo-nome"><%= faculdade.nome.toUpperCase() %></span>
+          </div>
+
+          <div class="sidebar-qr">
+            <img src="<%= qrCodeDataURL %>" alt="QR Code">
+          </div>
+
+          <div class="sidebar-site"><%= faculdade.site %></div>
+        </div>
+
+      </div>
+    </div>
+    <!-- fim carteirinha -->
+
+    <!-- Ações -->
+    <div class="acoes">
+      <a href="/carterinha/pdf" class="btn-pdf">📄 Baixar PDF</a>
+      <a href="<%= urlValidacao %>" target="_blank" class="btn-validar">🔗 Ver Validação</a>
+    </div>
+
+    <p class="info-txt">
+      O QR Code redireciona para a página de validação oficial desta carteirinha.
+    </p>
+  </main>
+
+</body>
+</html>

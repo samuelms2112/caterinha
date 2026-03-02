@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carteirinha — <%= aluno.nome %></title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="m2-page">
+
+  <!-- TOPBAR -->
+  <header class="m2-topbar">
+    <a href="/carterinha" class="m2-back">&#8592;</a>
+    <span class="m2-topbar-title">Carteira estudantil</span>
+    <span></span>
+  </header>
+
+  <main class="m2-main">
+
+    <!-- FLIP CARD: frente / verso -->
+    <div class="m2-flip-wrap" id="flipWrap">
+      <div class="m2-flip-inner" id="flipInner">
+
+        <!-- ══ FRENTE (app3) ══ -->
+        <div class="m2-card m2-frente">
+          <!-- Logo -->
+          <div class="m2-card-header">
+            <div class="m2-logo-row">
+              <span class="m2-logo-sigla"><%= faculdade.sigla %></span>
+              <span class="m2-logo-globe">🌐</span>
+            </div>
+            <p class="m2-inst-nome"><%= faculdade.nome %></p>
+            <p class="m2-card-tipo">Carteirinha de Identidade Estudantil</p>
+          </div>
+
+          <div class="m2-card-divider"></div>
+
+          <!-- Dados -->
+          <div class="m2-card-dados">
+            <div class="m2-campo">
+              <span class="m2-label">Aluno:</span>
+              <span class="m2-valor"><%= aluno.nome %></span>
+            </div>
+            <div class="m2-campo">
+              <span class="m2-label">Curso:</span>
+              <span class="m2-valor"><%= aluno.curso %></span>
+            </div>
+            <div class="m2-campo">
+              <span class="m2-label">Campus/PAP:</span>
+              <span class="m2-valor"><%= aluno.unidade || faculdade.cidade %></span>
+            </div>
+            <div class="m2-campo">
+              <span class="m2-label">RU:</span>
+              <span class="m2-valor"><%= aluno.matricula %></span>
+            </div>
+            <div class="m2-campo">
+              <span class="m2-label">CPF:</span>
+              <span class="m2-valor"><%= aluno.cpf || '—' %></span>
+            </div>
+            <div class="m2-campo">
+              <span class="m2-label">Validade:</span>
+              <span class="m2-valor"><%= aluno.validade %></span>
+            </div>
+            <div class="m2-campo">
+              <span class="m2-label">Data:</span>
+              <span class="m2-valor" id="dataAtual"></span>
+            </div>
+          </div>
+
+          <!-- QR Code canto inferior direito -->
+          <div class="m2-qr-wrap">
+            <img src="<%= qrCodeDataURL %>" alt="QR Code" class="m2-qr">
+          </div>
+        </div>
+
+        <!-- ══ VERSO (app4) ══ -->
+        <div class="m2-card m2-verso">
+          <!-- QR Code canto inferior esquerdo -->
+          <div class="m2-qr-wrap m2-qr-esq">
+            <img src="<%= qrCodeDataURL %>" alt="QR Code" class="m2-qr">
+          </div>
+
+          <!-- Termos -->
+          <div class="m2-termos">
+            <ul>
+              <li>Emitida com a finalidade de controle de acesso dos estudantes nas dependências da Instituição de Ensino. Válida somente com a apresentação da Carteira de identidade.</li>
+              <li>É indispensável a apresentação desta identificação para a entrada nas dependências da Instituição de Ensino;</li>
+              <li>A utilização da carteirinha para outros fins, que não seja para acesso às dependências do Polo/IES, será de total responsabilidade do aluno;</li>
+              <li>Para validação do usuário desta Carteira Estudantil poderá ser exigido um documento de identificação oficial (RG Civil, CNH ou CTPS).</li>
+            </ul>
+
+            <!-- Assinatura -->
+            <div class="m2-assinatura">
+              <div class="m2-assinatura-linha"></div>
+            </div>
+
+            <p class="m2-registro">
+              Registro ft. 37, livro de registro nº 1733m ~ 7º tabelião de <%= faculdade.cidade %>
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Botão virar -->
+    <button class="m2-virar-btn" onclick="virarCard()">↺ Virar carteirinha</button>
+
+    <!-- Ações -->
+    <div class="acoes" style="margin-top: 0.5rem;">
+      <a href="/carterinha/pdf" class="btn-pdf">📄 Baixar PDF</a>
+      <a href="<%= urlValidacao %>" target="_blank" class="btn-validar">🔗 Ver Validação</a>
+    </div>
+
+  </main>
+
+  <script>
+    // Data atual
+    const agora = new Date();
+    document.getElementById('dataAtual').textContent =
+      agora.toLocaleDateString('pt-BR') + ', ' +
+      agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+    // Flip card
+    let virado = false;
+    function virarCard() {
+      virado = !virado;
+      document.getElementById('flipInner').style.transform =
+        virado ? 'rotateY(180deg)' : 'rotateY(0deg)';
+    }
+  </script>
+
+</body>
+</html>

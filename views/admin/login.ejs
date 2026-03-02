@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — Login</title>
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body class="login-bg">
+  <div class="admin-login-wrapper">
+    <div class="admin-login-card">
+      <div class="admin-login-header">
+        <div class="admin-login-icon">🎓</div>
+        <h1>Painel Administrativo</h1>
+        <p>Acesse com suas credenciais de administrador</p>
+      </div>
+
+      <% if (erro) { %>
+        <div class="alert-erro"><%= erro %></div>
+      <% } %>
+
+      <form method="POST" action="/admin/login" class="admin-login-form">
+        <div class="form-group">
+          <label for="usuario">Usuário</label>
+          <input type="text" id="usuario" name="usuario" placeholder="admin" required autofocus>
+        </div>
+        <div class="form-group">
+          <label for="senha">Senha</label>
+          <input type="password" id="senha" name="senha" placeholder="Senha" required>
+        </div>
+        <button type="submit" class="btn-primary btn-block">Entrar</button>
+      </form>
+
+      <div class="login-back">
+        <a href="/login">&#8592; Voltar ao login de alunos</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

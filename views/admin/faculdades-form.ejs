@@ -1,0 +1,110 @@
+<% const isEdit = faculdade !== null; %>
+<% const v = faculdade || {}; %>
+
+<div class="form-card">
+  <% if (erro) { %>
+    <div class="alert-erro"><%= erro %></div>
+  <% } %>
+
+  <form method="POST"
+        action="<%= isEdit ? '/admin/faculdades/' + v.id + '/editar' : '/admin/faculdades/nova' %>"
+        enctype="multipart/form-data">
+
+    <div class="form-grid">
+
+      <div class="form-group">
+        <label>ID (identificador único) <% if (isEdit) { %><span class="label-hint">(não editável)</span><% } %></label>
+        <input type="text" name="id" value="<%= v.id || '' %>"
+               <%= isEdit ? 'readonly' : 'required' %> placeholder="Ex: facex">
+      </div>
+
+      <div class="form-group">
+        <label>Nome da faculdade</label>
+        <input type="text" name="nome" value="<%= v.nome || '' %>" required placeholder="Ex: Faculdade Exemplo">
+      </div>
+
+      <div class="form-group">
+        <label>Sigla</label>
+        <input type="text" name="sigla" value="<%= v.sigla || '' %>" required placeholder="Ex: FACEX">
+      </div>
+
+      <div class="form-group">
+        <label>CNPJ</label>
+        <input type="text" name="cnpj" value="<%= v.cnpj || '' %>" placeholder="00.000.000/0001-00">
+      </div>
+
+      <div class="form-group form-group--full">
+        <label>Endereço</label>
+        <input type="text" name="endereco" value="<%= v.endereco || '' %>" placeholder="Rua, número, bairro">
+      </div>
+
+      <div class="form-group">
+        <label>Cidade — UF</label>
+        <input type="text" name="cidade" value="<%= v.cidade || '' %>" placeholder="Ex: São Paulo - SP">
+      </div>
+
+      <div class="form-group">
+        <label>Telefone</label>
+        <input type="text" name="telefone" value="<%= v.telefone || '' %>" placeholder="(11) 0000-0000">
+      </div>
+
+      <div class="form-group">
+        <label>Site</label>
+        <input type="text" name="site" value="<%= v.site || '' %>" placeholder="www.facex.edu.br">
+      </div>
+
+      <div class="form-group">
+        <label>Cor primária</label>
+        <div class="color-input-row">
+          <input type="color" name="corPrimaria" value="<%= v.corPrimaria || '#1a3566' %>" id="corPrimaria">
+          <input type="text" id="corPrimariaTxt" value="<%= v.corPrimaria || '#1a3566' %>" class="color-text"
+                 oninput="document.getElementById('corPrimaria').value=this.value">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Cor secundária</label>
+        <div class="color-input-row">
+          <input type="color" name="corSecundaria" value="<%= v.corSecundaria || '#2e7bc4' %>" id="corSecundaria">
+          <input type="text" id="corSecundariaTxt" value="<%= v.corSecundaria || '#2e7bc4' %>" class="color-text"
+                 oninput="document.getElementById('corSecundaria').value=this.value">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Modelo padrão de carteirinha</label>
+        <select name="modeloPadrao">
+          <option value="1" <%= (!v.modeloPadrao || v.modeloPadrao == 1) ? 'selected' : '' %>>Modelo 1 (horizontal)</option>
+          <option value="2" <%= v.modeloPadrao == 2 ? 'selected' : '' %>>Modelo 2 (vertical)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Logo da faculdade</label>
+        <% if (isEdit && v.logo) { %>
+          <div class="logo-preview">
+            <img src="/uploads/logos/<%= v.logo %>" alt="Logo atual" class="logo-thumb-lg">
+            <span class="logo-hint">Envie um novo arquivo para substituir</span>
+          </div>
+        <% } %>
+        <input type="file" name="logo" accept="image/*">
+      </div>
+
+    </div>
+
+    <div class="form-actions">
+      <a href="/admin/faculdades" class="btn-secondary">Cancelar</a>
+      <button type="submit" class="btn-primary"><%= isEdit ? 'Salvar alterações' : 'Cadastrar faculdade' %></button>
+    </div>
+  </form>
+</div>
+
+<script>
+  // Sync color pickers <-> text inputs
+  document.getElementById('corPrimaria').addEventListener('input', function() {
+    document.getElementById('corPrimariaTxt').value = this.value;
+  });
+  document.getElementById('corSecundaria').addEventListener('input', function() {
+    document.getElementById('corSecundariaTxt').value = this.value;
+  });
+</script>

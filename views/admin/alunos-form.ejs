@@ -1,0 +1,83 @@
+<% const isEdit = aluno !== null; %>
+<% const v = aluno || {}; %>
+
+<div class="form-card">
+  <% if (erro) { %>
+    <div class="alert-erro"><%= erro %></div>
+  <% } %>
+
+  <form method="POST" action="<%= isEdit ? '/admin/alunos/' + v.matricula + '/editar' : '/admin/alunos/novo' %>">
+    <div class="form-grid">
+
+      <div class="form-group">
+        <label>Matrícula <% if (isEdit) { %><span class="label-hint">(não editável)</span><% } %></label>
+        <input type="text" name="matricula" value="<%= v.matricula || '' %>"
+               <%= isEdit ? 'readonly' : 'required' %> placeholder="Ex: 2024001">
+      </div>
+
+      <div class="form-group">
+        <label>Nome completo</label>
+        <input type="text" name="nome" value="<%= v.nome || '' %>" required placeholder="Nome do aluno">
+      </div>
+
+      <div class="form-group">
+        <label>Curso</label>
+        <input type="text" name="curso" value="<%= v.curso || '' %>" required placeholder="Ex: Ciência da Computação">
+      </div>
+
+      <div class="form-group">
+        <label>Período</label>
+        <input type="text" name="periodo" value="<%= v.periodo || '' %>" placeholder="Ex: 4° Semestre">
+      </div>
+
+      <div class="form-group">
+        <label>Validade</label>
+        <input type="text" name="validade" value="<%= v.validade || '' %>" placeholder="Ex: 31/12/2025">
+      </div>
+
+      <div class="form-group">
+        <label>RG</label>
+        <input type="text" name="rg" value="<%= v.rg || '' %>" placeholder="Ex: 123456789">
+      </div>
+
+      <div class="form-group">
+        <label>CPF</label>
+        <input type="text" name="cpf" value="<%= v.cpf || '' %>" placeholder="Ex: 000.000.000-00">
+      </div>
+
+      <div class="form-group">
+        <label>Unidade / Campus</label>
+        <input type="text" name="unidade" value="<%= v.unidade || '' %>" placeholder="Ex: Campus Centro">
+      </div>
+
+      <div class="form-group">
+        <label>Faculdade</label>
+        <select name="faculdadeId" required>
+          <option value="">Selecione...</option>
+          <% faculdades.forEach(f => { %>
+            <option value="<%= f.id %>" <%= v.faculdadeId === f.id ? 'selected' : '' %>><%= f.nome %></option>
+          <% }) %>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Senha</label>
+        <input type="text" name="senha" value="<%= v.senha || '' %>" required placeholder="Senha do aluno">
+      </div>
+
+      <div class="form-group">
+        <label>Modelo de carteirinha</label>
+        <select name="modelo">
+          <option value="1" <%= (v.modelo === '1' || !v.modelo) ? 'selected' : '' %>>Modelo 1 (horizontal)</option>
+          <option value="2" <%= v.modelo === '2' ? 'selected' : '' %>>Modelo 2 (vertical)</option>
+        </select>
+      </div>
+
+    </div>
+
+    <div class="form-actions">
+      <a href="/admin/alunos" class="btn-secondary">Cancelar</a>
+      <button type="submit" class="btn-primary"><%= isEdit ? 'Salvar alterações' : 'Cadastrar aluno' %></button>
+    </div>
+  </form>
+</div>

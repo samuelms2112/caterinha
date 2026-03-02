@@ -1,0 +1,26 @@
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-number"><%= totalAlunos %></div>
+    <div class="stat-label">Alunos cadastrados</div>
+    <a href="/admin/alunos" class="stat-link">Ver todos &rarr;</a>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number"><%= totalFaculdades %></div>
+    <div class="stat-label">Faculdades cadastradas</div>
+    <a href="/admin/faculdades" class="stat-link">Ver todas &rarr;</a>
+  </div>
+</div>
+
+<div class="dashboard-actions">
+  <h2>Ações rápidas</h2>
+  <div class="action-grid">
+    <a href="/admin/alunos/novo" class="action-card">
+      <span class="action-icon">&#43;</span>
+      <span>Novo Aluno</span>
+    </a>
+    <a href="/admin/faculdades/nova" class="action-card">
+      <span class="action-icon">&#43;</span>
+      <span>Nova Faculdade</span>
+    </a>
+  </div>
+</div>

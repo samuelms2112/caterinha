@@ -1,0 +1,775 @@
+/* ========================
+   RESET & BASE
+   ======================== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --azul:       #1a3566;
+  --azul-claro: #2e7bc4;
+  --branco:     #ffffff;
+  --cinza-bg:   #f0f2f6;
+  --cinza-leve: #e8eaed;
+  --texto:      #1a1a2e;
+  --label:      #888888;
+  --sombra:     0 12px 40px rgba(26, 53, 102, 0.18);
+}
+
+body {
+  font-family: 'Segoe UI', system-ui, Arial, sans-serif;
+  background: var(--cinza-bg);
+  color: var(--texto);
+  min-height: 100vh;
+}
+
+/* ========================
+   LOGIN
+   ======================== */
+.login-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(140deg, var(--azul) 0%, #0d2040 100%);
+}
+
+.login-container { width: 100%; max-width: 400px; padding: 1rem; }
+
+.login-card {
+  background: var(--branco);
+  border-radius: 14px;
+  box-shadow: var(--sombra);
+  overflow: hidden;
+}
+
+.login-header {
+  background: linear-gradient(135deg, var(--azul), #0d2040);
+  padding: 2rem 2rem 1.8rem;
+  text-align: center;
+  color: var(--branco);
+}
+.login-icon  { font-size: 2.8rem; margin-bottom: 0.6rem; }
+.login-header h1 { font-size: 1.35rem; font-weight: 700; margin-bottom: 0.25rem; }
+.login-header p  { opacity: 0.75; font-size: 0.88rem; }
+
+.login-form {
+  padding: 1.8rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.form-group { display: flex; flex-direction: column; gap: 0.35rem; }
+.form-group label { font-weight: 600; font-size: 0.82rem; color: #555; }
+.form-group input {
+  padding: 0.72rem 1rem;
+  border: 1.5px solid #dde1ea;
+  border-radius: 8px;
+  font-size: 0.97rem;
+  transition: border-color .2s;
+  background: #fafbfc;
+}
+.form-group input:focus { outline: none; border-color: var(--azul); background: var(--branco); }
+
+.btn-login {
+  background: linear-gradient(135deg, var(--azul), #0d2040);
+  color: var(--branco);
+  border: none;
+  padding: 0.82rem;
+  border-radius: 8px;
+  font-size: 0.97rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity .2s, transform .1s;
+  letter-spacing: 0.3px;
+}
+.btn-login:hover { opacity: 0.9; transform: translateY(-1px); }
+
+.alert { margin: 1rem 2rem 0; padding: 0.7rem 1rem; border-radius: 8px; font-size: 0.88rem; }
+.alert-erro { background: #fff2f2; color: #c0392b; border: 1px solid #f5c6cb; }
+
+/* ========================
+   TOPBAR
+   ======================== */
+.topbar {
+  background: linear-gradient(135deg, var(--azul), #0d2040);
+  color: var(--branco);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.85rem 2rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,.2);
+}
+.topbar-logo { font-size: 1rem; font-weight: 700; letter-spacing: 0.3px; }
+.topbar-actions { display: flex; align-items: center; gap: 1rem; }
+.topbar-user { font-size: 0.88rem; opacity: 0.85; }
+.btn-sair {
+  background: rgba(255,255,255,.14);
+  color: var(--branco);
+  text-decoration: none;
+  padding: 0.38rem 0.9rem;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  transition: background .2s;
+}
+.btn-sair:hover { background: rgba(255,255,255,.25); }
+
+/* ========================
+   PÁGINA DA CARTERINHA
+   ======================== */
+.carterinha-page { display: flex; flex-direction: column; }
+
+.main-content {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.6rem;
+  width: 100%;
+}
+
+.page-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--azul);
+  align-self: flex-start;
+}
+
+/* ════════════════════════════════════════
+   CARTEIRINHA — CARD
+   Proporções fiéis ao modelo de referência
+   ════════════════════════════════════════ */
+.card-wrap {
+  width: 100%;
+  max-width: 800px;
+}
+
+.student-card {
+  display: flex;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--sombra);
+  border: 1px solid #d0d4de;
+  background: var(--branco);
+  /* proporção ~3:2 landscape */
+  min-height: 260px;
+}
+
+/* ─── Área branca (≈75% da largura) ─── */
+.card-white {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--branco);
+}
+
+/* Topo: foto + dados (~65% da altura) */
+.card-top {
+  display: flex;
+  flex: 1;
+}
+
+/* Foto: sem bordas, cola no topo */
+.card-foto {
+  width: 168px;
+  min-height: 220px;
+  flex-shrink: 0;
+  background: #c8ccd4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.card-foto img  { width: 100%; height: 100%; object-fit: cover; display: block; }
+.foto-ph        { font-size: 4.5rem; opacity: 0.38; }
+
+/* Dados ao lado da foto */
+.card-info {
+  padding: 20px 20px 16px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.card-unidade {
+  font-size: 0.8rem;
+  color: #555;
+  font-weight: 400;
+  margin-bottom: 18px;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 14px;
+}
+.campo-label {
+  font-size: 0.6rem;
+  color: var(--label);
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+.campo-valor {
+  font-size: 1rem;
+  color: var(--texto);
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+/* Inferior: nome grande + curso em azul (~35% da altura) */
+.card-bottom {
+  padding: 14px 20px 18px;
+  border-top: 1px solid #e8eaed;
+}
+
+.card-nome {
+  font-size: 1.55rem;
+  font-weight: 700;
+  color: var(--texto);
+  line-height: 1.15;
+  margin-bottom: 5px;
+  letter-spacing: 0.2px;
+}
+.card-curso {
+  font-size: 0.88rem;
+  color: var(--azul-claro);
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+/* ─── Sidebar azul (~25% da largura) ─── */
+.card-sidebar {
+  width: 190px;
+  flex-shrink: 0;
+  background: var(--azul);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 14px 16px;
+}
+
+/* Logo */
+.sidebar-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  text-align: center;
+  width: 100%;
+}
+.logo-sigla {
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--branco);
+  letter-spacing: 2px;
+  line-height: 1;
+}
+.logo-nome {
+  font-size: 0.42rem;
+  color: rgba(255,255,255,0.55);
+  letter-spacing: 0.4px;
+  line-height: 1.4;
+}
+
+/* QR Code com moldura branca */
+.sidebar-qr {
+  background: var(--branco);
+  padding: 6px;
+  flex-shrink: 0;
+}
+.sidebar-qr img { display: block; width: 118px; height: 118px; }
+
+/* Site */
+.sidebar-site {
+  font-size: 0.62rem;
+  color: rgba(255,255,255,0.7);
+  text-align: center;
+  word-break: break-all;
+}
+
+/* ========================
+   AÇÕES
+   ======================== */
+.acoes { display: flex; gap: 0.9rem; flex-wrap: wrap; justify-content: center; }
+
+.btn-pdf, .btn-validar {
+  text-decoration: none;
+  padding: 0.72rem 1.4rem;
+  border-radius: 8px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  transition: transform .15s, box-shadow .15s;
+  letter-spacing: 0.2px;
+}
+.btn-pdf {
+  background: var(--azul);
+  color: var(--branco);
+  box-shadow: 0 4px 14px rgba(26,53,102,.28);
+}
+.btn-validar {
+  background: var(--branco);
+  color: var(--azul);
+  border: 2px solid var(--azul);
+  box-shadow: 0 4px 14px rgba(26,53,102,.10);
+}
+.btn-pdf:hover, .btn-validar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(26,53,102,.22);
+}
+
+.info-txt { font-size: 0.78rem; color: #999; text-align: center; max-width: 500px; }
+
+/* ════════════════════════════════════════
+   VALIDAÇÃO — fiel ao modelo de referência
+   ════════════════════════════════════════ */
+
+.val-page {
+  background: #ffffff;
+  min-height: 100vh;
+  font-family: 'Courier New', Courier, monospace;
+  color: #111;
+}
+
+/* ── 1. HEADER AZUL/CIANO ── */
+.val-header {
+  background: #4bbecf;
+  padding: 18px 20px 14px;
+  text-align: center;
+}
+.val-header-invalido { background: #c0392b; }
+
+/* Badge pill (branco, arredondado — o "MEIA ENTRADA") */
+.val-badge-pill {
+  display: inline-block;
+  background: #ffffff;
+  color: #111;
+  font-family: Arial, sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 8px 48px;
+  border-radius: 30px;
+  margin-bottom: 10px;
+}
+.invalido-pill { color: #c0392b; }
+
+.val-header-sub {
+  font-family: Arial, sans-serif;
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.9);
+  margin: 0;
+  letter-spacing: 0.2px;
+}
+
+/* ── 2. CORPO CENTRAL ── */
+.val-corpo {
+  max-width: 580px;
+  margin: 0 auto;
+  padding: 28px 20px 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+/* Nome em monoespaçado pequeno */
+.val-nome-dec {
+  font-size: 0.75rem;
+  text-align: center;
+  letter-spacing: 1px;
+  margin: 0;
+}
+.val-dec-texto {
+  font-size: 0.75rem;
+  text-align: center;
+  color: #333;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ── 3. CAIXA VERDE — DOCUMENTO VÁLIDO ── */
+.val-box-valido {
+  width: 100%;
+  max-width: 480px;
+  background: #b8e6b8;
+  border: 1px solid #90cc90;
+  border-radius: 10px;
+  padding: 22px 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.val-box-valido strong {
+  font-family: Arial, sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #111;
+  letter-spacing: 0.5px;
+}
+.val-box-valido span {
+  font-family: Arial, sans-serif;
+  font-size: 1rem;
+  color: #222;
+}
+
+/* ── 4. FOTO CENTRALIZADA ── */
+.val-foto-wrap {
+  display: flex;
+  justify-content: center;
+}
+.val-foto-img {
+  width: 150px;
+  height: 185px;
+  object-fit: cover;
+  display: block;
+  border: 1px solid #ccc;
+}
+.val-foto-ph {
+  width: 150px;
+  height: 185px;
+  background: #c8ccd4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
+  opacity: 0.45;
+}
+
+/* ── 5. DADOS COM SEPARADORES ── */
+.val-dados {
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.val-dado {
+  margin-bottom: 12px;
+  text-align: center;
+}
+.val-dado span {
+  font-size: 0.7rem;
+  letter-spacing: 0.5px;
+  color: #111;
+  line-height: 1.8;
+  display: block;
+}
+.val-dado hr {
+  border: none;
+  border-top: 1px solid #555;
+  margin: 4px 0 0;
+}
+
+/* ── 6. CERTIFICADO (rodapé) ── */
+.val-cert {
+  margin-top: 60px;
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-size: 0.55rem;
+  color: #999;
+  text-align: center;
+  word-break: break-all;
+  line-height: 1.5;
+}
+.val-cert span:first-child,
+.val-cert span:last-child {
+  color: #666;
+  font-weight: bold;
+}
+
+/* ── INVÁLIDO ── */
+.val-box-invalido {
+  width: 100%;
+  max-width: 480px;
+  background: #fde8e8;
+  border: 1px solid #e09090;
+  border-radius: 10px;
+  padding: 22px 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.val-box-invalido strong {
+  font-family: Arial, sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #c0392b;
+}
+.val-box-invalido span {
+  font-family: Arial, sans-serif;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* ========================
+   RESPONSIVO
+   ======================== */
+@media (max-width: 640px) {
+  .student-card { flex-direction: column; max-width: 360px; margin: 0 auto; }
+  .card-sidebar {
+    width: 100%;
+    flex-direction: row;
+    padding: 12px 18px;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .sidebar-logo { flex-direction: row; align-items: center; gap: 10px; }
+  .logo-nome { display: none; }
+  .sidebar-qr img { width: 80px; height: 80px; }
+  .card-foto { width: 100%; min-height: 210px; }
+  .card-nome { font-size: 1.25rem; }
+  .validar-rodape { flex-direction: column; align-items: center; text-align: center; }
+}
+
+/* ════════════════════════════════════════
+   MODELO 2 — Estilo app Uninter
+   ════════════════════════════════════════ */
+
+/* Toggle de modelos */
+.modelo-toggle {
+  display: flex;
+  gap: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 2px solid var(--azul);
+  align-self: flex-start;
+}
+.modelo-btn {
+  padding: 0.5rem 1.2rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--azul);
+  background: var(--branco);
+  transition: background .2s, color .2s;
+}
+.modelo-btn.ativo {
+  background: var(--azul);
+  color: var(--branco);
+}
+.modelo-btn:hover:not(.ativo) { background: #eef1f8; }
+
+/* Página modelo 2 */
+.m2-page {
+  background: #1a1a1a;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Segoe UI', system-ui, Arial, sans-serif;
+}
+
+/* Topbar modelo 2 */
+.m2-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.2rem 0.8rem;
+  border-bottom: 1px solid rgba(255,255,255,.1);
+}
+.m2-back {
+  color: #ffffff;
+  font-size: 1.3rem;
+  text-decoration: none;
+  font-weight: 700;
+  padding: 4px 8px;
+}
+.m2-topbar-title {
+  color: #ffffff;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+/* Main modelo 2 */
+.m2-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.2rem 1rem 2rem;
+  gap: 1rem;
+}
+
+/* Flip card wrapper */
+.m2-flip-wrap {
+  width: 100%;
+  max-width: 500px;
+  perspective: 1200px;
+}
+.m2-flip-inner {
+  position: relative;
+  width: 100%;
+  transition: transform 0.6s cubic-bezier(.4,0,.2,1);
+  transform-style: preserve-3d;
+}
+
+/* Card base */
+.m2-card {
+  width: 100%;
+  background: #eef0f5;
+  border-radius: 12px;
+  padding: 20px 20px 16px;
+  backface-visibility: hidden;
+  position: relative;
+  min-height: 320px;
+  box-shadow: 0 8px 32px rgba(0,0,0,.35);
+}
+.m2-verso {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  transform: rotateY(180deg);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Header do card (logo) */
+.m2-card-header { margin-bottom: 12px; }
+.m2-logo-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+.m2-logo-sigla {
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: #1a1a1a;
+  letter-spacing: 1px;
+  line-height: 1;
+}
+.m2-logo-globe { font-size: 1.4rem; }
+.m2-inst-nome {
+  font-size: 0.78rem;
+  color: #444;
+  margin-bottom: 2px;
+}
+.m2-card-tipo {
+  font-size: 0.72rem;
+  color: #666;
+}
+
+/* Divisor */
+.m2-card-divider {
+  height: 1px;
+  background: #cccccc;
+  margin: 10px 0 12px;
+}
+
+/* Dados */
+.m2-card-dados { display: flex; flex-direction: column; gap: 7px; }
+.m2-campo { display: flex; gap: 4px; align-items: baseline; flex-wrap: wrap; }
+.m2-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #333;
+  flex-shrink: 0;
+}
+.m2-valor {
+  font-size: 0.78rem;
+  color: #111;
+}
+
+/* QR Code — canto inferior direito */
+.m2-qr-wrap {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  background: #ffffff;
+  padding: 4px;
+  border-radius: 4px;
+}
+.m2-qr-esq {
+  right: auto;
+  left: 16px;
+  bottom: 16px;
+}
+.m2-qr { display: block; width: 80px; height: 80px; }
+
+/* Verso — termos */
+.m2-termos {
+  padding-right: 100px; /* espaço pro QR */
+}
+.m2-termos ul {
+  padding-left: 14px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.m2-termos ul li {
+  font-size: 0.68rem;
+  color: #333;
+  line-height: 1.45;
+}
+
+/* Assinatura */
+.m2-assinatura {
+  margin: 18px 0 8px;
+  background: #e0e0e0;
+  height: 50px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #aaa;
+  font-size: 0.7rem;
+  font-style: italic;
+}
+
+.m2-registro {
+  font-size: 0.62rem;
+  color: #666;
+  line-height: 1.4;
+}
+
+/* Botão virar */
+.m2-virar-btn {
+  background: rgba(255,255,255,.12);
+  color: #ffffff;
+  border: 1.5px solid rgba(255,255,255,.3);
+  padding: 0.55rem 1.4rem;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .2s;
+  letter-spacing: 0.3px;
+}
+.m2-virar-btn:hover { background: rgba(255,255,255,.22); }
+
+/* Toggle no modelo 2 */
+.m2-main .modelo-toggle {
+  border-color: rgba(255,255,255,.4);
+}
+.m2-main .modelo-btn {
+  color: rgba(255,255,255,.7);
+  background: transparent;
+}
+.m2-main .modelo-btn.ativo {
+  background: rgba(255,255,255,.2);
+  color: #ffffff;
+}
+.m2-main .modelo-btn:hover:not(.ativo) {
+  background: rgba(255,255,255,.1);
+}
+
+/* Botões de ação no m2 */
+.m2-main .btn-pdf {
+  background: rgba(255,255,255,.15);
+  border: 1.5px solid rgba(255,255,255,.3);
+}
+.m2-main .btn-validar {
+  background: transparent;
+  border-color: rgba(255,255,255,.3);
+  color: rgba(255,255,255,.85);
+}

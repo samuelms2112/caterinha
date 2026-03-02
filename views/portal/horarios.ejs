@@ -1,0 +1,28 @@
+<%- include('_header', { pageTitle: 'Horário das Aulas', aluno: aluno, showBack: true }) %>
+
+<div class="portal-section-title">GRADE SEMANAL</div>
+
+<div class="horario-scroll">
+  <table class="horario-table">
+    <thead>
+      <tr>
+        <th>Horário</th>
+        <% content.dias.forEach(d => { %><th><%= d.substring(0,3) %></th><% }) %>
+      </tr>
+    </thead>
+    <tbody>
+      <% content.turnos.forEach(turno => { %>
+        <tr>
+          <td class="turno-cell"><%= turno %></td>
+          <% content.dias.forEach(dia => { %>
+            <td class="<%= content.horarios[dia][turno] ? 'aula-cell' : 'vazio-cell' %>">
+              <%= content.horarios[dia][turno] || '—' %>
+            </td>
+          <% }) %>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+<%- include('_footer') %>

@@ -1,0 +1,21 @@
+<%- include('_header', { pageTitle: 'Código de Entrada', aluno: aluno, showBack: true }) %>
+
+<div class="portal-section-title">SEU CÓDIGO DE ACESSO</div>
+
+<div class="portal-card" style="text-align:center;padding:36px 16px">
+  <p style="font-size:12px;color:#888;margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em">Código diário</p>
+  <div class="codigo-display"><%= content.codigoEntrada %></div>
+  <p style="font-size:12px;color:#aaa;margin-top:14px">
+    Apresente este código ao portão de entrada da instituição.<br>
+    Válido para o dia de hoje.
+  </p>
+</div>
+
+<div class="portal-card portal-card--data" style="margin-top:12px">
+  <p><strong>Aluno:</strong> <%= aluno.nome %></p>
+  <p><strong>Matrícula:</strong> <%= aluno.matricula %></p>
+  <p><strong>Curso:</strong> <%= aluno.curso %></p>
+  <p><strong>Validade:</strong> <%= aluno.validade %></p>
+</div>
+
+<%- include('_footer') %>

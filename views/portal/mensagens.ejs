@@ -1,0 +1,31 @@
+<%- include('_header', { pageTitle: 'Mensagens', aluno: aluno, showBack: true }) %>
+
+<% if (content.mensagens.length === 0) { %>
+  <div class="portal-card" style="text-align:center;color:#888;padding:32px">
+    Nenhuma mensagem no momento.
+  </div>
+<% } %>
+
+<% content.mensagens.forEach((m, i) => { %>
+  <div class="portal-card portal-card--msg" onclick="toggleMsg(<%= i %>)">
+    <div class="msg-header">
+      <div>
+        <p class="msg-from">&#9993; <%= m.de %></p>
+        <p class="msg-subject"><%= m.assunto %></p>
+      </div>
+      <span class="msg-date"><%= m.data %></span>
+    </div>
+    <div class="msg-body" id="msg-<%= i %>" style="display:none">
+      <p><%= m.corpo %></p>
+    </div>
+  </div>
+<% }) %>
+
+<script>
+function toggleMsg(i) {
+  const el = document.getElementById('msg-' + i);
+  el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+</script>
+
+<%- include('_footer') %>

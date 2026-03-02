@@ -1,0 +1,51 @@
+<div class="toolbar">
+  <form method="GET" action="/admin/alunos" class="filter-form">
+    <select name="faculdadeId" onchange="this.form.submit()">
+      <option value="">Todas as faculdades</option>
+      <% faculdades.forEach(f => { %>
+        <option value="<%= f.id %>" <%= filtro === f.id ? 'selected' : '' %>><%= f.nome %></option>
+      <% }) %>
+    </select>
+  </form>
+  <a href="/admin/alunos/novo" class="btn-primary">+ Novo Aluno</a>
+</div>
+
+<% if (alunos.length === 0) { %>
+  <div class="empty-state">Nenhum aluno encontrado.</div>
+<% } else { %>
+  <div class="table-wrapper">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Matrícula</th>
+          <th>Nome</th>
+          <th>Curso</th>
+          <th>Faculdade</th>
+          <th>Modelo</th>
+          <th>Validade</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% alunos.forEach(a => { %>
+          <% const fac = faculdades.find(f => f.id === a.faculdadeId); %>
+          <tr>
+            <td><code><%= a.matricula %></code></td>
+            <td><%= a.nome %></td>
+            <td><%= a.curso %></td>
+            <td><%= fac ? fac.sigla : (a.faculdadeId || '—') %></td>
+            <td>Modelo <%= a.modelo || '1' %></td>
+            <td><%= a.validade %></td>
+            <td class="actions">
+              <a href="/admin/alunos/<%= a.matricula %>/editar" class="btn-edit">Editar</a>
+              <form method="POST" action="/admin/alunos/<%= a.matricula %>/deletar" class="inline-form"
+                    onsubmit="return confirm('Deletar aluno <%= a.nome %>?')">
+                <button type="submit" class="btn-delete">Deletar</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+<% } %>

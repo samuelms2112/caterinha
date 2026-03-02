@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Validação — <%= faculdade.nome %></title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="val-page">
+
+<% if (valido) { %>
+
+  <!-- ══ 1. HEADER AZUL ══ -->
+  <div class="val-header">
+    <div class="val-badge-pill">CARTEIRINHA ESTUDANTIL</div>
+    <p class="val-header-sub">Validação de CIE &nbsp;(CARTEIRA DE IDENTIFICAÇÃO ESTUDANTIL)</p>
+  </div>
+
+  <div class="val-corpo">
+
+    <!-- ══ 2. NOME + DECLARAÇÃO ══ -->
+    <p class="val-nome-dec"><%= aluno.nome.toUpperCase() %></p>
+    <p class="val-dec-texto">é estudante e está regularmente<br>matriculado(a)</p>
+
+    <!-- ══ 3. CAIXA VERDE — DOCUMENTO VÁLIDO ══ -->
+    <div class="val-box-valido">
+      <strong>DOCUMENTO VÁLIDO</strong>
+      <span><%= aluno.validade %></span>
+    </div>
+
+    <!-- ══ 4. FOTO CENTRALIZADA ══ -->
+    <div class="val-foto-wrap">
+      <% if (aluno.foto && aluno.foto !== 'default.png') { %>
+        <img src="/uploads/<%= aluno.foto %>" alt="Foto" class="val-foto-img">
+      <% } else { %>
+        <div class="val-foto-ph">👤</div>
+      <% } %>
+    </div>
+
+    <!-- ══ 5. DADOS COM SEPARADORES ══ -->
+    <div class="val-dados">
+      <div class="val-dado">
+        <span><strong>NOME:</strong> <%= aluno.nome.toUpperCase() %></span>
+        <hr>
+      </div>
+      <div class="val-dado">
+        <span><strong>INSTITUIÇÃO :</strong> <%= faculdade.nome.toUpperCase() %></span>
+        <hr>
+      </div>
+      <div class="val-dado">
+        <span><strong>CURSO:</strong> <%= aluno.curso.toUpperCase() %></span>
+        <hr>
+      </div>
+      <div class="val-dado">
+        <span><strong>MATRÍCULA:</strong> <%= aluno.matricula %></span>
+        <hr>
+      </div>
+      <div class="val-dado">
+        <span><strong>RG:</strong> <%= aluno.rg || '—' %></span>
+      </div>
+    </div>
+
+    <!-- ══ 6. DECORAÇÃO CERTIFICADO (rodapé) ══ -->
+    <div class="val-cert">
+      <span>---- BEGIN CERTIFICATE ----</span>
+      <span>IYsQMYgAQyEAgAEAAYgwEY4wIDF556fgfYsQMYgAQyEwgBEC4YgwEY</span>
+      <span>xwEYsQMY0QMYgAQyBggCEEUYOTIGCAMQRRg8MgYIBBAFGEAyBggFEEUY</span>
+      <span>PDIGCAYQRRg8MgYIBxBFGDzSAQgxMjIwajBqN6gwEY4wIDF556fgf</span>
+      <span>YsQMYgAQyEwgBEC4YgwEYxwEYsQMY0QgwEY4wIDF556</span>
+      <span>gwEY4wIDF556fgfYsQMYgAQyEwgBEC4YgwEYxwEYsQMY0Q</span>
+      <span>---- END CERTIFICATE ----</span>
+    </div>
+
+  </div>
+
+<% } else { %>
+
+  <!-- ══ INVÁLIDO ══ -->
+  <div class="val-header val-header-invalido">
+    <div class="val-badge-pill invalido-pill">DOCUMENTO INVÁLIDO</div>
+    <p class="val-header-sub">Validação de CIE &nbsp;(CARTEIRA DE IDENTIFICAÇÃO ESTUDANTIL)</p>
+  </div>
+
+  <div class="val-corpo">
+    <div class="val-box-invalido">
+      <strong>DOCUMENTO NÃO RECONHECIDO</strong>
+      <span>Este documento não pôde ser verificado</span>
+    </div>
+    <p class="val-dec-texto" style="margin-top:1.5rem;">
+      Este documento pode estar vencido, adulterado<br>
+      ou não pertence a esta instituição.<br><br>
+      Dúvidas? Entre em contato:<br>
+      <strong><%= faculdade.telefone %></strong><br>
+      <%= faculdade.site %>
+    </p>
+  </div>
+
+<% } %>
+
+</body>
+</html>

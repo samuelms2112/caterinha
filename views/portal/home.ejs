@@ -1,0 +1,65 @@
+<%- include('_header', { pageTitle: 'NSA — ALUNO', aluno: aluno, showBack: false }) %>
+
+<!-- Aviso -->
+<div class="portal-aviso">
+  <div class="aviso-title">AVISO</div>
+  <p><%= content.aviso %></p>
+</div>
+
+<!-- Habilitação -->
+<div class="portal-section-title">SELECIONE A HABILITAÇÃO</div>
+<div class="portal-card portal-card--select">
+  <span><%= aluno.curso %></span>
+  <span class="card-arrow">&#9660;</span>
+</div>
+
+<!-- Dados da classe -->
+<div class="portal-section-title">DADOS DA CLASSE SELECIONADA</div>
+<div class="portal-card portal-card--data">
+  <p><strong>RM:</strong> <%= aluno.matricula %></p>
+  <p><strong>Semestre OC:</strong> 1° SEMESTRE &nbsp;&nbsp; <strong>Ano OC:</strong> <%= new Date().getFullYear() %></p>
+  <p><strong>Módulo/Série Atual:</strong> <%= aluno.periodo %></p>
+  <p><strong>Turma:</strong> TURMA A</p>
+  <p><strong>Grupo do Componente:</strong> &nbsp;</p>
+  <p><strong>Situação da Matrícula:</strong> CURSANDO</p>
+  <p><strong>Validade:</strong> <%= aluno.validade %></p>
+</div>
+
+<!-- Menu de navegação -->
+<div class="portal-section-title">MENU DE NAVEGAÇÃO</div>
+<div class="nav-grid">
+  <a href="/portal/faltas" class="nav-btn">
+    <span class="nav-btn-icon">&#128197;</span>
+    <span>Aulas e Faltas</span>
+  </a>
+  <a href="/portal/mensagens" class="nav-btn">
+    <span class="nav-btn-icon">&#9993;</span>
+    <span>Mensagens</span>
+  </a>
+  <a href="/portal/horarios" class="nav-btn">
+    <span class="nav-btn-icon">&#128345;</span>
+    <span>Horários das aulas</span>
+  </a>
+  <a href="/portal/declaracoes" class="nav-btn">
+    <span class="nav-btn-icon">&#128196;</span>
+    <span>Declarações</span>
+  </a>
+  <a href="/portal/boletim" class="nav-btn">
+    <span class="nav-btn-icon">&#128202;</span>
+    <span>Boletim</span>
+  </a>
+  <a href="/portal/foto" class="nav-btn">
+    <span class="nav-btn-icon">&#128247;</span>
+    <span>Foto</span>
+  </a>
+  <a href="/portal/codigo" class="nav-btn">
+    <span class="nav-btn-icon">&#128273;</span>
+    <span>Código de Entrada</span>
+  </a>
+  <a href="/portal/identidade" class="nav-btn">
+    <span class="nav-btn-icon">&#128196;</span>
+    <span>Identidade Estudantil</span>
+  </a>
+</div>
+
+<%- include('_footer') %>

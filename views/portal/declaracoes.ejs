@@ -1,0 +1,24 @@
+<%- include('_header', { pageTitle: 'Declarações', aluno: aluno, showBack: true }) %>
+
+<div class="portal-section-title">DECLARAÇÕES DISPONÍVEIS</div>
+
+<% const declaracoes = [
+  { nome: 'Declaração de Matrícula', desc: 'Comprova que você está regularmente matriculado.' },
+  { nome: 'Declaração de Vínculo', desc: 'Comprova seu vínculo com a instituição.' },
+  { nome: 'Histórico Escolar Parcial', desc: 'Histórico com as notas e frequência até o momento.' },
+  { nome: 'Atestado de Frequência', desc: 'Atesta sua frequência nas disciplinas cursadas.' },
+]; %>
+
+<% declaracoes.forEach(d => { %>
+  <div class="portal-card portal-card--decl">
+    <div>
+      <p class="decl-nome"><%= d.nome %></p>
+      <p class="decl-desc"><%= d.desc %></p>
+    </div>
+    <button class="btn-decl" onclick="alert('Declaração solicitada! Retire na secretaria em até 5 dias úteis.')">
+      Solicitar
+    </button>
+  </div>
+<% }) %>
+
+<%- include('_footer') %>

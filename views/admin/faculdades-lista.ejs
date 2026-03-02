@@ -1,0 +1,53 @@
+<div class="toolbar">
+  <a href="/admin/faculdades/nova" class="btn-primary">+ Nova Faculdade</a>
+</div>
+
+<% if (faculdades.length === 0) { %>
+  <div class="empty-state">Nenhuma faculdade cadastrada.</div>
+<% } else { %>
+  <div class="table-wrapper">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Logo</th>
+          <th>Nome</th>
+          <th>Sigla</th>
+          <th>Cidade</th>
+          <th>Modelo padrão</th>
+          <th>Cores</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% faculdades.forEach(f => { %>
+          <tr>
+            <td>
+              <% if (f.logo) { %>
+                <img src="/uploads/logos/<%= f.logo %>" alt="Logo" class="logo-thumb">
+              <% } else { %>
+                <div class="logo-placeholder" style="background:<%= f.corPrimaria || '#1a3566' %>">
+                  <%= f.sigla ? f.sigla.charAt(0) : '?' %>
+                </div>
+              <% } %>
+            </td>
+            <td><strong><%= f.nome %></strong></td>
+            <td><code><%= f.sigla %></code></td>
+            <td><%= f.cidade %></td>
+            <td>Modelo <%= f.modeloPadrao || 1 %></td>
+            <td class="cores-cell">
+              <span class="cor-dot" style="background:<%= f.corPrimaria %>" title="<%= f.corPrimaria %>"></span>
+              <span class="cor-dot" style="background:<%= f.corSecundaria %>" title="<%= f.corSecundaria %>"></span>
+            </td>
+            <td class="actions">
+              <a href="/admin/faculdades/<%= f.id %>/editar" class="btn-edit">Editar</a>
+              <form method="POST" action="/admin/faculdades/<%= f.id %>/deletar" class="inline-form"
+                    onsubmit="return confirm('Deletar faculdade <%= f.nome %>?')">
+                <button type="submit" class="btn-delete">Deletar</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+<% } %>
