@@ -1,5 +1,5 @@
 matricula,nome,curso,periodo,validade,rg,cpf,unidade,faculdadeId,foto,senha,modelo
-2024001,João Silva,Ciência da Computação,4° Semestre,31/12/2025,123456789,396.296.938-10,Campus Centro,facex,default.png,1234,1
+2024001,João Silva,Ciência da Computação,4° Semestre,31/12/2025,123456789,396.296.938-10,Campus Centro,,default.png,1234,2
 2024002,Maria Oliveira,Engenharia Civil,2° Semestre,31/12/2025,987654321,123.456.789-00,Campus Norte,facex,default.png,5678,2
 2024003,Carlos Souza,Administração,6° Semestre,31/12/2025,456789123,321.654.987-11,Campus Sul,facex,default.png,4321,1
 571003539,Samuel Melo da Silva,Análise de Sistemas,5 Semestre,31/12/2026,571003539,490.079.628-09,Unidade Matão,facex,default.png,Melo2112@,2

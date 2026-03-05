@@ -94,7 +94,7 @@ async function gerarPdfModelo2(req, res, faculdade) {
     .fillColor(corFundo)
     .fontSize(22)
     .font("Helvetica-Bold")
-    .text(faculdade.sigla + " 🌐", CX + PAD, CY + 16, { width: CW - PAD * 2 });
+    .text(faculdade.sigla + "", CX + PAD, CY + 16, { width: CW - PAD * 2 });
 
   doc
     .fillColor("#333")

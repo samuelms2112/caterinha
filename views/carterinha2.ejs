@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Carteirinha — <%= aluno.nome %></title>
+  <title>Carteirinha — <%= aluno.nome %>
+  </title>
   <link rel="stylesheet" href="/css/style.css">
 </head>
+
 <body class="m2-page">
 
   <!-- TOPBAR -->
@@ -26,10 +29,13 @@
           <!-- Logo -->
           <div class="m2-card-header">
             <div class="m2-logo-row">
-              <span class="m2-logo-sigla"><%= faculdade.sigla %></span>
-              <span class="m2-logo-globe">🌐</span>
+              <span class="m2-logo-sigla">
+                <%= faculdade.sigla %>
+              </span>
             </div>
-            <p class="m2-inst-nome"><%= faculdade.nome %></p>
+            <p class="m2-inst-nome">
+              <%= faculdade.nome %>
+            </p>
             <p class="m2-card-tipo">Carteirinha de Identidade Estudantil</p>
           </div>
 
@@ -39,27 +45,39 @@
           <div class="m2-card-dados">
             <div class="m2-campo">
               <span class="m2-label">Aluno:</span>
-              <span class="m2-valor"><%= aluno.nome %></span>
+              <span class="m2-valor">
+                <%= aluno.nome %>
+              </span>
             </div>
             <div class="m2-campo">
               <span class="m2-label">Curso:</span>
-              <span class="m2-valor"><%= aluno.curso %></span>
+              <span class="m2-valor">
+                <%= aluno.curso %>
+              </span>
             </div>
             <div class="m2-campo">
               <span class="m2-label">Campus/PAP:</span>
-              <span class="m2-valor"><%= aluno.unidade || faculdade.cidade %></span>
+              <span class="m2-valor">
+                <%= aluno.unidade || faculdade.cidade %>
+              </span>
             </div>
             <div class="m2-campo">
               <span class="m2-label">RU:</span>
-              <span class="m2-valor"><%= aluno.matricula %></span>
+              <span class="m2-valor">
+                <%= aluno.matricula %>
+              </span>
             </div>
             <div class="m2-campo">
               <span class="m2-label">CPF:</span>
-              <span class="m2-valor"><%= aluno.cpf || '—' %></span>
+              <span class="m2-valor">
+                <%= aluno.cpf || '—' %>
+              </span>
             </div>
             <div class="m2-campo">
               <span class="m2-label">Validade:</span>
-              <span class="m2-valor"><%= aluno.validade %></span>
+              <span class="m2-valor">
+                <%= aluno.validade %>
+              </span>
             </div>
             <div class="m2-campo">
               <span class="m2-label">Data:</span>
@@ -83,10 +101,14 @@
           <!-- Termos -->
           <div class="m2-termos">
             <ul>
-              <li>Emitida com a finalidade de controle de acesso dos estudantes nas dependências da Instituição de Ensino. Válida somente com a apresentação da Carteira de identidade.</li>
-              <li>É indispensável a apresentação desta identificação para a entrada nas dependências da Instituição de Ensino;</li>
-              <li>A utilização da carteirinha para outros fins, que não seja para acesso às dependências do Polo/IES, será de total responsabilidade do aluno;</li>
-              <li>Para validação do usuário desta Carteira Estudantil poderá ser exigido um documento de identificação oficial (RG Civil, CNH ou CTPS).</li>
+              <li>Emitida com a finalidade de controle de acesso dos estudantes nas dependências da Instituição de
+                Ensino. Válida somente com a apresentação da Carteira de identidade.</li>
+              <li>É indispensável a apresentação desta identificação para a entrada nas dependências da Instituição de
+                Ensino;</li>
+              <li>A utilização da carteirinha para outros fins, que não seja para acesso às dependências do Polo/IES,
+                será de total responsabilidade do aluno;</li>
+              <li>Para validação do usuário desta Carteira Estudantil poderá ser exigido um documento de identificação
+                oficial (RG Civil, CNH ou CTPS).</li>
             </ul>
 
             <!-- Assinatura -->
@@ -131,4 +153,5 @@
   </script>
 
 </body>
+
 </html>

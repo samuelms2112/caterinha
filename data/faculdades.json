@@ -1,14 +1,15 @@
 [
   {
-    "nome": "Faculdade de Tecnologia de Matão",
-    "sigla": "FATM",
-    "cnpj": "00.000.000/0001-00",
-    "endereco": "Rua das Flores, 123 - Centro",
-    "cidade": "São Paulo - SP",
-    "telefone": "(11) 0000-0000",
-    "site": "www.fatm.edu.br",
-    "corPrimaria": "#1a3566",
-    "corSecundaria": "#2e7bc4",
+    "nome": "Instituto Municipal Matonense de Ensino Superior",
+    "sigla": "IMMES",
+    "cnpj": "02.331.553/0001-20",
+    "endereco": " Avenida Tiradentes, 629, Centro ",
+    "cidade": "Matão - SP",
+    "telefone": "(16) 3383-1353",
+    "site": "immes.edu.br",
+    "corPrimaria": "#00838d",
+    "corSecundaria": "#a5d2b8",
     "modeloPadrao": 2
   }
+  
 ]
