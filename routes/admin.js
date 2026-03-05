@@ -15,7 +15,8 @@ const uploadFoto = multer({
   fileFilter: (req, file, cb) => {
     if (file.mimetype.startsWith('image/')) cb(null, true);
     else cb(new Error('Apenas imagens são permitidas'));
-  }
+  },
+  limits: { fileSize: 5 * 1024 * 1024 }
 });
 
 function adminAutenticado(req, res, next) {
@@ -25,6 +26,14 @@ function adminAutenticado(req, res, next) {
 
 function renderAdmin(res, view, data = {}) {
   res.render('admin/layout', { view, ...data });
+}
+
+function gerarMatricula(alunos) {
+  let mat;
+  do {
+    mat = Math.floor(100000000 + Math.random() * 900000000).toString();
+  } while (alunos.find(a => a.matricula === mat));
+  return mat;
 }
 
 // ── Login ──
@@ -51,8 +60,8 @@ router.get('/logout', (req, res) => {
 
 // ── Dashboard ──
 
-router.get('/', adminAutenticado, async (req, res) => {
-  const alunos = await lerAlunos();
+router.get('/', adminAutenticado, (req, res) => {
+  const alunos = lerAlunos();
   const faculdades = lerFaculdades();
   renderAdmin(res, 'dashboard', {
     title: 'Dashboard',
@@ -64,8 +73,8 @@ router.get('/', adminAutenticado, async (req, res) => {
 
 // ── Alunos ──
 
-router.get('/alunos', adminAutenticado, async (req, res) => {
-  const alunos = await lerAlunos();
+router.get('/alunos', adminAutenticado, (req, res) => {
+  const alunos = lerAlunos();
   const faculdades = lerFaculdades();
   const filtro = req.query.faculdadeId || '';
   const alunosFiltrados = filtro ? alunos.filter(a => a.faculdadeId === filtro) : alunos;
@@ -85,31 +94,38 @@ router.get('/alunos/novo', adminAutenticado, (req, res) => {
     admin: req.session.admin,
     aluno: null,
     faculdades,
-    erro: null
+    erro: null,
+    novo: false
   });
 });
 
-router.post('/alunos/novo', adminAutenticado, uploadFoto.single('foto'), async (req, res) => {
-  const alunos = await lerAlunos();
-  const { matricula, nome, curso, periodo, validade, rg, cpf, unidade, faculdadeId, senha, modelo } = req.body;
-  if (alunos.find(a => a.matricula === matricula)) {
-    const faculdades = lerFaculdades();
-    return renderAdmin(res, 'alunos-form', {
-      title: 'Novo Aluno',
-      admin: req.session.admin,
-      aluno: req.body,
-      faculdades,
-      erro: 'Matrícula já cadastrada.'
-    });
-  }
+router.post('/alunos/novo', adminAutenticado, uploadFoto.single('foto'), (req, res) => {
+  const alunos = lerAlunos();
+  const { nome, curso, faculdadeId, validade, modelo } = req.body;
+  const matricula = gerarMatricula(alunos);
+  const senha = matricula; // senha inicial = matrícula
   const foto = req.file ? req.file.filename : 'default.png';
-  alunos.push({ matricula, nome, curso, periodo, validade, rg, cpf, unidade, faculdadeId, foto, senha, modelo: modelo || '1' });
+  alunos.push({
+    matricula,
+    nome,
+    curso,
+    faculdadeId,
+    validade: validade || '',
+    modelo: modelo || '1',
+    foto,
+    senha,
+    rg: '',
+    cpf: '',
+    periodo: '',
+    unidade: '',
+    perfilCompleto: false
+  });
   salvarAlunos(alunos);
-  res.redirect('/admin/alunos');
+  res.redirect('/admin/alunos/' + matricula + '/editar?novo=1');
 });
 
-router.get('/alunos/:matricula/editar', adminAutenticado, async (req, res) => {
-  const alunos = await lerAlunos();
+router.get('/alunos/:matricula/editar', adminAutenticado, (req, res) => {
+  const alunos = lerAlunos();
   const aluno = alunos.find(a => a.matricula === req.params.matricula);
   if (!aluno) return res.redirect('/admin/alunos');
   const faculdades = lerFaculdades();
@@ -118,25 +134,39 @@ router.get('/alunos/:matricula/editar', adminAutenticado, async (req, res) => {
     admin: req.session.admin,
     aluno,
     faculdades,
-    erro: null
+    erro: null,
+    novo: req.query.novo === '1'
   });
 });
 
-router.post('/alunos/:matricula/editar', adminAutenticado, uploadFoto.single('foto'), async (req, res) => {
-  const alunos = await lerAlunos();
+router.post('/alunos/:matricula/editar', adminAutenticado, uploadFoto.single('foto'), (req, res) => {
+  const alunos = lerAlunos();
   const idx = alunos.findIndex(a => a.matricula === req.params.matricula);
   if (idx === -1) return res.redirect('/admin/alunos');
-  const { nome, curso, periodo, validade, rg, cpf, unidade, faculdadeId, senha, modelo } = req.body;
+  const { nome, curso, periodo, validade, rg, cpf, unidade, faculdadeId, senha, modelo, perfilCompleto } = req.body;
   const foto = req.file ? req.file.filename : alunos[idx].foto;
-  alunos[idx] = { ...alunos[idx], nome, curso, periodo, validade, rg, cpf, unidade, faculdadeId, senha, modelo, foto };
+  alunos[idx] = {
+    ...alunos[idx],
+    nome,
+    curso,
+    periodo,
+    validade,
+    rg,
+    cpf,
+    unidade,
+    faculdadeId,
+    senha,
+    modelo,
+    foto,
+    perfilCompleto: perfilCompleto === 'true'
+  };
   salvarAlunos(alunos);
   res.redirect('/admin/alunos');
 });
 
-router.post('/alunos/:matricula/deletar', adminAutenticado, async (req, res) => {
-  const alunos = await lerAlunos();
-  const novos = alunos.filter(a => a.matricula !== req.params.matricula);
-  salvarAlunos(novos);
+router.post('/alunos/:matricula/deletar', adminAutenticado, (req, res) => {
+  const alunos = lerAlunos();
+  salvarAlunos(alunos.filter(a => a.matricula !== req.params.matricula));
   res.redirect('/admin/alunos');
 });
 
@@ -200,8 +230,7 @@ router.post('/faculdades/:id/editar', adminAutenticado, (req, res) => {
 
 router.post('/faculdades/:id/deletar', adminAutenticado, (req, res) => {
   const faculdades = lerFaculdades();
-  const novas = faculdades.filter(f => f.id !== req.params.id);
-  salvarFaculdades(novas);
+  salvarFaculdades(faculdades.filter(f => f.id !== req.params.id));
   res.redirect('/admin/faculdades');
 });
 

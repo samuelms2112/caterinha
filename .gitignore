@@ -7,3 +7,4 @@ public/uploads/*.webp
 !public/uploads/default.svg
 *.log
 .env
+data/.secret

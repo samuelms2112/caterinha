@@ -2,18 +2,34 @@
 <% const v = aluno || {}; %>
 
 <div class="form-card">
+
+  <% if (novo) { %>
+    <div style="background:#e6f9ee;border:1px solid #5cb85c;border-radius:6px;padding:14px 16px;margin-bottom:18px">
+      <strong style="color:#2d6a2d">Aluno cadastrado com sucesso!</strong><br>
+      <span style="color:#3a3a3a;font-size:13px">Compartilhe as credenciais abaixo com o aluno:</span><br><br>
+      <span style="font-size:13px"><strong>Matrícula:</strong> <%= v.matricula %></span><br>
+      <span style="font-size:13px"><strong>Senha inicial:</strong> <%= v.senha %></span><br>
+      <span style="font-size:12px;color:#666;margin-top:6px;display:block">O aluno precisará completar os dados pessoais no primeiro acesso.</span>
+    </div>
+  <% } %>
+
   <% if (erro) { %>
     <div class="alert-erro"><%= erro %></div>
   <% } %>
 
-  <form method="POST" action="<%= isEdit ? '/admin/alunos/' + v.matricula + '/editar' : '/admin/alunos/novo' %>" enctype="multipart/form-data">
+  <form method="POST"
+        action="<%= isEdit ? '/admin/alunos/' + v.matricula + '/editar' : '/admin/alunos/novo' %>"
+        enctype="multipart/form-data">
+
     <div class="form-grid">
 
-      <div class="form-group">
-        <label>Matrícula <% if (isEdit) { %><span class="label-hint">(não editável)</span><% } %></label>
-        <input type="text" name="matricula" value="<%= v.matricula || '' %>"
-               <%= isEdit ? 'readonly' : 'required' %> placeholder="Ex: 2024001">
-      </div>
+      <!-- Matrícula: só visível na edição (readonly) -->
+      <% if (isEdit) { %>
+        <div class="form-group">
+          <label>Matrícula <span class="label-hint">(não editável)</span></label>
+          <input type="text" value="<%= v.matricula %>" readonly>
+        </div>
+      <% } %>
 
       <div class="form-group">
         <label>Nome completo</label>
@@ -23,31 +39,6 @@
       <div class="form-group">
         <label>Curso</label>
         <input type="text" name="curso" value="<%= v.curso || '' %>" required placeholder="Ex: Ciência da Computação">
-      </div>
-
-      <div class="form-group">
-        <label>Período</label>
-        <input type="text" name="periodo" value="<%= v.periodo || '' %>" placeholder="Ex: 4° Semestre">
-      </div>
-
-      <div class="form-group">
-        <label>Validade</label>
-        <input type="text" name="validade" value="<%= v.validade || '' %>" placeholder="Ex: 31/12/2025">
-      </div>
-
-      <div class="form-group">
-        <label>RG</label>
-        <input type="text" name="rg" value="<%= v.rg || '' %>" placeholder="Ex: 123456789">
-      </div>
-
-      <div class="form-group">
-        <label>CPF</label>
-        <input type="text" name="cpf" value="<%= v.cpf || '' %>" placeholder="Ex: 000.000.000-00">
-      </div>
-
-      <div class="form-group">
-        <label>Unidade / Campus</label>
-        <input type="text" name="unidade" value="<%= v.unidade || '' %>" placeholder="Ex: Campus Centro">
       </div>
 
       <div class="form-group">
@@ -61,8 +52,8 @@
       </div>
 
       <div class="form-group">
-        <label>Senha</label>
-        <input type="text" name="senha" value="<%= v.senha || '' %>" required placeholder="Senha do aluno">
+        <label>Validade</label>
+        <input type="text" name="validade" value="<%= v.validade || '' %>" placeholder="Ex: 31/12/2025">
       </div>
 
       <div class="form-group">
@@ -83,6 +74,44 @@
         <% } %>
         <input type="file" name="foto" accept="image/*">
       </div>
+
+      <!-- Campos extras visíveis só na edição -->
+      <% if (isEdit) { %>
+
+        <div class="form-group">
+          <label>Senha <span class="label-hint">(altere para resetar)</span></label>
+          <input type="text" name="senha" value="<%= v.senha || '' %>" required placeholder="Senha do aluno">
+        </div>
+
+        <div class="form-group">
+          <label>Período <span class="label-hint">(preenchido pelo aluno)</span></label>
+          <input type="text" name="periodo" value="<%= v.periodo || '' %>" placeholder="Ex: 4° Semestre">
+        </div>
+
+        <div class="form-group">
+          <label>Unidade / Campus <span class="label-hint">(preenchido pelo aluno)</span></label>
+          <input type="text" name="unidade" value="<%= v.unidade || '' %>" placeholder="Ex: Campus Centro">
+        </div>
+
+        <div class="form-group">
+          <label>RG <span class="label-hint">(preenchido pelo aluno)</span></label>
+          <input type="text" name="rg" value="<%= v.rg || '' %>" placeholder="Ex: 123456789">
+        </div>
+
+        <div class="form-group">
+          <label>CPF <span class="label-hint">(preenchido pelo aluno)</span></label>
+          <input type="text" name="cpf" value="<%= v.cpf || '' %>" placeholder="Ex: 000.000.000-00">
+        </div>
+
+        <div class="form-group">
+          <label>Perfil completo</label>
+          <select name="perfilCompleto">
+            <option value="true" <%= v.perfilCompleto == true ? 'selected' : '' %>>Sim</option>
+            <option value="false" <%= !v.perfilCompleto ? 'selected' : '' %>>Não (aguardando aluno completar)</option>
+          </select>
+        </div>
+
+      <% } %>
 
     </div>
 

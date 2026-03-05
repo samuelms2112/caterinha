@@ -4,6 +4,8 @@ const path = require('path');
 const multer = require('multer');
 const { lerFaculdades, lerAlunos, salvarAlunos } = require('../helpers/db');
 
+// lerAlunos agora é síncrono
+
 const uploadFoto = multer({
   storage: multer.diskStorage({
     destination: (req, file, cb) => cb(null, path.join(__dirname, '../public/uploads')),
@@ -20,6 +22,12 @@ const uploadFoto = multer({
 });
 
 function portalAutenticado(req, res, next) {
+  if (!req.session.aluno) return res.redirect('/login');
+  if (!req.session.aluno.perfilCompleto) return res.redirect('/portal/completar-perfil');
+  next();
+}
+
+function alunoLogado(req, res, next) {
   if (!req.session.aluno) return res.redirect('/login');
   next();
 }
@@ -156,12 +164,12 @@ router.get('/foto', portalAutenticado, (req, res) => {
   res.render('portal/foto', { aluno, sucesso: null, erro: null });
 });
 
-router.post('/foto', portalAutenticado, uploadFoto.single('foto'), async (req, res) => {
+router.post('/foto', portalAutenticado, uploadFoto.single('foto'), (req, res) => {
   const aluno = req.session.aluno;
   if (!req.file) {
     return res.render('portal/foto', { aluno, sucesso: null, erro: 'Selecione uma imagem para enviar.' });
   }
-  const alunos = await lerAlunos();
+  const alunos = lerAlunos();
   const idx = alunos.findIndex(a => a.matricula === aluno.matricula);
   if (idx !== -1) {
     alunos[idx].foto = req.file.filename;
@@ -180,6 +188,29 @@ router.get('/codigo', portalAutenticado, (req, res) => {
 router.get('/identidade', portalAutenticado, (req, res) => {
   const aluno = req.session.aluno;
   res.render('portal/identidade', { aluno });
+});
+
+// ── Completar Perfil (primeiro login) ──────────────────────────────
+
+router.get('/completar-perfil', alunoLogado, (req, res) => {
+  if (req.session.aluno.perfilCompleto) return res.redirect('/portal');
+  res.render('portal/completar-perfil', { aluno: req.session.aluno, erro: null });
+});
+
+router.post('/completar-perfil', alunoLogado, (req, res) => {
+  if (req.session.aluno.perfilCompleto) return res.redirect('/portal');
+  const { rg, cpf, periodo, unidade } = req.body;
+  if (!rg || !cpf || !periodo) {
+    return res.render('portal/completar-perfil', { aluno: req.session.aluno, erro: 'Preencha todos os campos obrigatórios.' });
+  }
+  const alunos = lerAlunos();
+  const idx = alunos.findIndex(a => a.matricula === req.session.aluno.matricula);
+  if (idx !== -1) {
+    alunos[idx] = { ...alunos[idx], rg, cpf, periodo, unidade, perfilCompleto: true };
+    salvarAlunos(alunos);
+    req.session.aluno = alunos[idx];
+  }
+  res.redirect('/portal');
 });
 
 module.exports = router;

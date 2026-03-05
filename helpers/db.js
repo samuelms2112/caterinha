@@ -1,53 +1,85 @@
 const fs = require('fs');
 const path = require('path');
-const csv = require('csv-parser');
+const { encrypt, decrypt, isEncrypted } = require('./crypto');
 
 const FACULDADES_PATH = path.join(__dirname, '../data/faculdades.json');
-const ALUNOS_PATH = path.join(__dirname, '../data/alunos.csv');
-const ADMIN_PATH = path.join(__dirname, '../data/admin.json');
+const ALUNOS_PATH     = path.join(__dirname, '../data/alunos.json');
+const ALUNOS_CSV_PATH = path.join(__dirname, '../data/alunos.csv');
+const ADMIN_PATH      = path.join(__dirname, '../data/admin.json');
 
-const CSV_HEADER = 'matricula,nome,curso,periodo,validade,rg,cpf,unidade,faculdadeId,foto,senha,modelo';
+// ── Faculdades ──────────────────────────────────────────────────────
 
 function lerFaculdades() {
-  return JSON.parse(fs.readFileSync(FACULDADES_PATH, 'utf-8'));
+  const raw = fs.readFileSync(FACULDADES_PATH, 'utf-8').trim();
+  const wasEncrypted = isEncrypted(raw);
+  const arr = wasEncrypted ? JSON.parse(decrypt(raw)) : JSON.parse(raw);
+
+  // Garante que toda faculdade tem campo id
+  const result = arr.map(f => ({
+    id: f.id || f.sigla.toLowerCase(),
+    ...f,
+  }));
+
+  // Migração: se estava em texto claro, salva encriptado
+  if (!wasEncrypted) salvarFaculdades(result);
+
+  return result;
 }
 
 function salvarFaculdades(arr) {
-  fs.writeFileSync(FACULDADES_PATH, JSON.stringify(arr, null, 2), 'utf-8');
+  fs.writeFileSync(FACULDADES_PATH, encrypt(JSON.stringify(arr)), 'utf-8');
 }
 
-function lerAlunos() {
-  return new Promise((resolve, reject) => {
-    const alunos = [];
-    fs.createReadStream(ALUNOS_PATH)
-      .pipe(csv())
-      .on('data', (row) => alunos.push(row))
-      .on('end', () => resolve(alunos))
-      .on('error', reject);
+// ── Alunos ──────────────────────────────────────────────────────────
+
+// Parser CSV simples (para migração única do CSV legado)
+function parseCSVMigration() {
+  if (!fs.existsSync(ALUNOS_CSV_PATH)) return [];
+  const content = fs.readFileSync(ALUNOS_CSV_PATH, 'utf-8');
+  const lines = content.trim().split('\n');
+  const headers = lines[0].split(',').map(h => h.trim());
+
+  return lines.slice(1).filter(l => l.trim()).map(line => {
+    const vals = [];
+    let cur = '', inQ = false;
+    for (const ch of line) {
+      if (ch === '"') { inQ = !inQ; }
+      else if (ch === ',' && !inQ) { vals.push(cur); cur = ''; }
+      else { cur += ch; }
+    }
+    vals.push(cur);
+    const obj = {};
+    headers.forEach((h, i) => { obj[h] = (vals[i] || '').trim(); });
+    obj.perfilCompleto = true; // dados do CSV já estão completos
+    return obj;
   });
 }
 
-function escaparCsv(val) {
-  if (val === null || val === undefined) return '';
-  const str = String(val);
-  if (str.includes(',') || str.includes('"') || str.includes('\n')) {
-    return '"' + str.replace(/"/g, '""') + '"';
+function lerAlunos() {
+  if (!fs.existsSync(ALUNOS_PATH)) {
+    // Primeira execução: migra do CSV legado
+    const alunos = parseCSVMigration();
+    salvarAlunos(alunos);
+    return alunos;
   }
-  return str;
+  const raw = fs.readFileSync(ALUNOS_PATH, 'utf-8').trim();
+  return isEncrypted(raw) ? JSON.parse(decrypt(raw)) : JSON.parse(raw);
 }
 
 function salvarAlunos(arr) {
-  const linhas = arr.map(a =>
-    [
-      a.matricula, a.nome, a.curso, a.periodo, a.validade,
-      a.rg, a.cpf, a.unidade, a.faculdadeId, a.foto, a.senha, a.modelo
-    ].map(escaparCsv).join(',')
-  );
-  fs.writeFileSync(ALUNOS_PATH, CSV_HEADER + '\n' + linhas.join('\n') + '\n', 'utf-8');
+  fs.writeFileSync(ALUNOS_PATH, encrypt(JSON.stringify(arr)), 'utf-8');
 }
 
+// ── Admin ────────────────────────────────────────────────────────────
+
 function lerAdmin() {
-  return JSON.parse(fs.readFileSync(ADMIN_PATH, 'utf-8'));
+  const raw = fs.readFileSync(ADMIN_PATH, 'utf-8').trim();
+  const wasEncrypted = isEncrypted(raw);
+  const data = wasEncrypted ? JSON.parse(decrypt(raw)) : JSON.parse(raw);
+  if (!wasEncrypted) {
+    fs.writeFileSync(ADMIN_PATH, encrypt(JSON.stringify(data)), 'utf-8');
+  }
+  return data;
 }
 
 module.exports = { lerFaculdades, salvarFaculdades, lerAlunos, salvarAlunos, lerAdmin };

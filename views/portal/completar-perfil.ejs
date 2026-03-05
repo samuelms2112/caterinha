@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Completar Perfil — Portal do Aluno</title>
+  <link rel="stylesheet" href="/css/portal.css">
+  <style>
+    .perfil-wrap {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      background: #f4f6fa;
+    }
+    .perfil-card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.10);
+      padding: 28px 24px;
+      width: 100%;
+      max-width: 420px;
+    }
+    .perfil-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 4px;
+    }
+    .perfil-sub {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 22px;
+    }
+    .perfil-group {
+      margin-bottom: 14px;
+    }
+    .perfil-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #444;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .perfil-group input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 14px;
+      box-sizing: border-box;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .perfil-group input:focus {
+      border-color: #2563eb;
+    }
+    .perfil-btn {
+      width: 100%;
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    .perfil-erro {
+      background: #fdecea;
+      border: 1px solid #e74c3c;
+      border-radius: 6px;
+      color: #a02020;
+      font-size: 13px;
+      padding: 10px 14px;
+      margin-bottom: 14px;
+    }
+    .obrig {
+      color: #e74c3c;
+    }
+  </style>
+</head>
+<body>
+<div class="perfil-wrap">
+  <div class="perfil-card">
+    <div class="perfil-title">Bem-vindo, <%= aluno.nome.split(' ')[0] %>!</div>
+    <div class="perfil-sub">Para continuar, complete seus dados pessoais. Essas informações aparecem na sua carteirinha.</div>
+
+    <% if (erro) { %>
+      <div class="perfil-erro"><%= erro %></div>
+    <% } %>
+
+    <form method="POST" action="/portal/completar-perfil">
+      <div class="perfil-group">
+        <label>RG <span class="obrig">*</span></label>
+        <input type="text" name="rg" placeholder="Ex: 12.345.678-9" required>
+      </div>
+      <div class="perfil-group">
+        <label>CPF <span class="obrig">*</span></label>
+        <input type="text" name="cpf" placeholder="Ex: 000.000.000-00" required>
+      </div>
+      <div class="perfil-group">
+        <label>Período / Semestre <span class="obrig">*</span></label>
+        <input type="text" name="periodo" placeholder="Ex: 3° Semestre" required>
+      </div>
+      <div class="perfil-group">
+        <label>Unidade / Campus</label>
+        <input type="text" name="unidade" placeholder="Ex: Campus Centro">
+      </div>
+      <button type="submit" class="perfil-btn">Salvar e entrar no portal</button>
+    </form>
+  </div>
+</div>
+</body>
+</html>
