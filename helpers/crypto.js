@@ -5,8 +5,15 @@ const path = require('path');
 const KEY_PATH = path.join(__dirname, '../data/.secret');
 
 function getKey() {
+  // Prioridade: variável de ambiente → arquivo .secret
+  if (process.env.CARTERINHA_SECRET) {
+    const buf = Buffer.from(process.env.CARTERINHA_SECRET, 'hex');
+    if (buf.length === 32) return buf;
+  }
   if (!fs.existsSync(KEY_PATH)) {
-    fs.writeFileSync(KEY_PATH, crypto.randomBytes(32).toString('hex'), 'utf-8');
+    const key = crypto.randomBytes(32).toString('hex');
+    fs.writeFileSync(KEY_PATH, key, 'utf-8');
+    console.log('[crypto] Chave gerada em data/.secret — guarde-a em segurança!');
   }
   return Buffer.from(fs.readFileSync(KEY_PATH, 'utf-8').trim(), 'hex');
 }
@@ -28,7 +35,7 @@ function decrypt(text) {
   return Buffer.concat([decipher.update(enc), decipher.final()]).toString('utf-8');
 }
 
-// Returns true if the string looks like our iv:hex format
+// Retorna true se o conteúdo parece ser iv:hex (nosso formato encriptado)
 function isEncrypted(raw) {
   return /^[0-9a-f]{32}:[0-9a-f]+$/i.test(raw.trim());
 }

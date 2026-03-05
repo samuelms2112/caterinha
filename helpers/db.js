@@ -7,12 +7,28 @@ const ALUNOS_PATH     = path.join(__dirname, '../data/alunos.json');
 const ALUNOS_CSV_PATH = path.join(__dirname, '../data/alunos.csv');
 const ADMIN_PATH      = path.join(__dirname, '../data/admin.json');
 
+// ── Helpers ──────────────────────────────────────────────────────────
+
+function readJSON(raw) {
+  const text = raw.trim();
+  if (isEncrypted(text)) {
+    try {
+      return JSON.parse(decrypt(text));
+    } catch (e) {
+      // Chave errada ou arquivo corrompido — trata como texto plano
+      console.error('[db] Falha ao decriptar, tentando como JSON puro:', e.message);
+    }
+  }
+  // Remove BOM se houver e parseia como JSON puro
+  return JSON.parse(text.replace(/^\uFEFF/, ''));
+}
+
 // ── Faculdades ──────────────────────────────────────────────────────
 
 function lerFaculdades() {
-  const raw = fs.readFileSync(FACULDADES_PATH, 'utf-8').trim();
-  const wasEncrypted = isEncrypted(raw);
-  const arr = wasEncrypted ? JSON.parse(decrypt(raw)) : JSON.parse(raw);
+  const raw = fs.readFileSync(FACULDADES_PATH, 'utf-8');
+  const wasEncrypted = isEncrypted(raw.trim());
+  const arr = readJSON(raw);
 
   // Garante que toda faculdade tem campo id
   const result = arr.map(f => ({
@@ -32,7 +48,7 @@ function salvarFaculdades(arr) {
 
 // ── Alunos ──────────────────────────────────────────────────────────
 
-// Parser CSV simples (para migração única do CSV legado)
+// Parser CSV simples para migração única do CSV legado
 function parseCSVMigration() {
   if (!fs.existsSync(ALUNOS_CSV_PATH)) return [];
   const content = fs.readFileSync(ALUNOS_CSV_PATH, 'utf-8');
@@ -50,7 +66,7 @@ function parseCSVMigration() {
     vals.push(cur);
     const obj = {};
     headers.forEach((h, i) => { obj[h] = (vals[i] || '').trim(); });
-    obj.perfilCompleto = true; // dados do CSV já estão completos
+    obj.perfilCompleto = true;
     return obj;
   });
 }
@@ -62,8 +78,7 @@ function lerAlunos() {
     salvarAlunos(alunos);
     return alunos;
   }
-  const raw = fs.readFileSync(ALUNOS_PATH, 'utf-8').trim();
-  return isEncrypted(raw) ? JSON.parse(decrypt(raw)) : JSON.parse(raw);
+  return readJSON(fs.readFileSync(ALUNOS_PATH, 'utf-8'));
 }
 
 function salvarAlunos(arr) {
@@ -73,9 +88,9 @@ function salvarAlunos(arr) {
 // ── Admin ────────────────────────────────────────────────────────────
 
 function lerAdmin() {
-  const raw = fs.readFileSync(ADMIN_PATH, 'utf-8').trim();
-  const wasEncrypted = isEncrypted(raw);
-  const data = wasEncrypted ? JSON.parse(decrypt(raw)) : JSON.parse(raw);
+  const raw = fs.readFileSync(ADMIN_PATH, 'utf-8');
+  const wasEncrypted = isEncrypted(raw.trim());
+  const data = readJSON(raw);
   if (!wasEncrypted) {
     fs.writeFileSync(ADMIN_PATH, encrypt(JSON.stringify(data)), 'utf-8');
   }
