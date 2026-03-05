@@ -2,6 +2,13 @@
 
 <div class="portal-section-title">FOTO DO ALUNO</div>
 
+<% if (sucesso) { %>
+  <div class="alert-sucesso" style="margin-bottom:12px;padding:10px 14px;background:#e6f9ee;border:1px solid #5cb85c;border-radius:6px;color:#2d6a2d;font-size:13px"><%= sucesso %></div>
+<% } %>
+<% if (erro) { %>
+  <div class="alert-erro" style="margin-bottom:12px;padding:10px 14px;background:#fdecea;border:1px solid #e74c3c;border-radius:6px;color:#a02020;font-size:13px"><%= erro %></div>
+<% } %>
+
 <div class="portal-card" style="text-align:center;padding:28px 16px">
   <% if (aluno.foto && aluno.foto !== 'default.png') { %>
     <img src="/uploads/<%= aluno.foto %>" alt="Foto" class="foto-grande">
@@ -12,7 +19,14 @@
   <% } %>
   <p style="margin-top:14px;font-weight:600;font-size:15px"><%= aluno.nome %></p>
   <p style="color:#666;font-size:13px;margin-top:4px">Matrícula: <%= aluno.matricula %></p>
-  <p style="color:#888;font-size:12px;margin-top:14px">Para atualizar sua foto, compareça à secretaria da instituição.</p>
+
+  <form method="POST" action="/portal/foto" enctype="multipart/form-data" style="margin-top:20px">
+    <div style="margin-bottom:10px">
+      <input type="file" name="foto" accept="image/*" required style="font-size:13px">
+    </div>
+    <button type="submit" style="background:#2563eb;color:#fff;border:none;border-radius:6px;padding:8px 20px;font-size:14px;cursor:pointer">Enviar foto</button>
+  </form>
+  <p style="color:#aaa;font-size:11px;margin-top:10px">Formatos aceitos: JPG, PNG, WEBP. Máx. 5 MB.</p>
 </div>
 
 <%- include('_footer') %>

@@ -1,6 +1,23 @@
 const express = require('express');
 const router = express.Router();
-const { lerFaculdades } = require('../helpers/db');
+const path = require('path');
+const multer = require('multer');
+const { lerFaculdades, lerAlunos, salvarAlunos } = require('../helpers/db');
+
+const uploadFoto = multer({
+  storage: multer.diskStorage({
+    destination: (req, file, cb) => cb(null, path.join(__dirname, '../public/uploads')),
+    filename: (req, file, cb) => {
+      const ext = path.extname(file.originalname);
+      cb(null, 'foto_' + Date.now() + ext);
+    }
+  }),
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) cb(null, true);
+    else cb(new Error('Apenas imagens são permitidas'));
+  },
+  limits: { fileSize: 5 * 1024 * 1024 }
+});
 
 function portalAutenticado(req, res, next) {
   if (!req.session.aluno) return res.redirect('/login');
@@ -136,7 +153,22 @@ router.get('/boletim', portalAutenticado, (req, res) => {
 
 router.get('/foto', portalAutenticado, (req, res) => {
   const aluno = req.session.aluno;
-  res.render('portal/foto', { aluno });
+  res.render('portal/foto', { aluno, sucesso: null, erro: null });
+});
+
+router.post('/foto', portalAutenticado, uploadFoto.single('foto'), async (req, res) => {
+  const aluno = req.session.aluno;
+  if (!req.file) {
+    return res.render('portal/foto', { aluno, sucesso: null, erro: 'Selecione uma imagem para enviar.' });
+  }
+  const alunos = await lerAlunos();
+  const idx = alunos.findIndex(a => a.matricula === aluno.matricula);
+  if (idx !== -1) {
+    alunos[idx].foto = req.file.filename;
+    salvarAlunos(alunos);
+    req.session.aluno = { ...aluno, foto: req.file.filename };
+  }
+  res.render('portal/foto', { aluno: req.session.aluno, sucesso: 'Foto atualizada com sucesso!', erro: null });
 });
 
 router.get('/codigo', portalAutenticado, (req, res) => {
